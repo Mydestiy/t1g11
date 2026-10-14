@@ -1,0 +1,2176 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Practice Test 2 (40 Câu) - Ms Lê Hằng English</title>
+  <!-- Google Fonts: Nunito & Quicksand -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Quicksand:wght@500;600;700;800&display=swap" rel="stylesheet">
+  <!-- Canvas Confetti -->
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+  <style>
+    :root {
+      --primary-purple: #8854C0;
+      --primary-pink: #FD79A8;
+      --primary-yellow: #FDCB6E;
+      --primary-teal: #00C9A7;
+      --primary-blue: #0984E3;
+      --correct-green: #00D26A;
+      --correct-green-shadow: #00a352;
+      --wrong-red: #FF4757;
+      --wrong-red-shadow: #d63031;
+      --card-bg: rgba(255, 255, 255, 0.96);
+      --text-main: #2D3436;
+      --text-muted: #636E72;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Nunito', 'Quicksand', sans-serif;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      min-height: 100vh;
+      color: var(--text-main);
+      background: linear-gradient(180deg, #bbf2f6 0%, #d8e8f8 25%, #fedacb 60%, #fed1c0 85%, #fca289 100%);
+      position: relative;
+      overflow-x: hidden;
+      padding: 16px 12px 140px;
+    }
+
+    /* Bầu trời, Mặt trời phát sáng & Mây trôi */
+    .sky-decorations {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .sun-glow {
+      position: absolute;
+      top: 25px;
+      left: -20px;
+      width: 140px;
+      height: 140px;
+      background: radial-gradient(circle, #ffeaa7 40%, rgba(255, 234, 167, 0.4) 70%, transparent 100%);
+      border-radius: 50%;
+      filter: blur(10px);
+      animation: pulseSun 6s ease-in-out infinite alternate;
+    }
+
+    @keyframes pulseSun {
+      0% { transform: scale(0.95); opacity: 0.8; }
+      100% { transform: scale(1.1); opacity: 1; }
+    }
+
+    .floating-cloud {
+      position: absolute;
+      fill: rgba(255, 255, 255, 0.75);
+      animation: floatCloud linear infinite;
+    }
+
+    .cloud-1 { top: 60px; left: -120px; width: 140px; animation-duration: 48s; }
+    .cloud-2 { top: 180px; left: -160px; width: 180px; animation-duration: 65s; animation-delay: -25s; }
+
+    @keyframes floatCloud {
+      0% { transform: translateX(0); }
+      100% { transform: translateX(calc(100vw + 250px)); }
+    }
+
+    /* Dãy phố Skyline & Con đường vỉa hè sọc đỏ trắng */
+    .city-backdrop {
+      position: fixed;
+      bottom: 42px;
+      left: 0;
+      width: 100%;
+      height: 150px;
+      pointer-events: none;
+      z-index: 0;
+      opacity: 0.55;
+      background-repeat: repeat-x;
+      background-position: bottom center;
+      background-size: 550px 140px;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 550 140'%3E%3Cpath fill='%23a5cbf5' d='M0,140 L0,70 L30,70 L30,50 L45,50 L45,30 L60,30 L60,70 L90,70 L90,140 Z M100,140 L100,40 L140,40 L140,140 Z M150,140 L150,65 L180,65 L180,140 Z M190,140 L190,20 L230,20 L230,140 Z M240,140 L240,55 L280,55 L280,140 Z M290,140 L290,35 L330,35 L330,140 Z M340,140 L340,75 L380,75 L380,140 Z M390,140 L390,15 L430,15 L430,140 Z M440,140 L440,60 L490,60 L490,140 Z M500,140 L500,45 L540,45 L540,140 Z'/%3E%3C/svg%3E");
+    }
+
+    .bottom-road {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 44px;
+      background: #4b4b4b;
+      border-top: 5px solid #2ed573;
+      z-index: 0;
+      display: flex;
+      align-items: center;
+      justify-content: space-around;
+      overflow: hidden;
+    }
+
+    .road-curb {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 4px;
+      background: repeating-linear-gradient(90deg, #ff4757, #ff4757 25px, #ffffff 25px, #ffffff 50px);
+    }
+
+    .road-line {
+      height: 6px;
+      width: 45px;
+      background: #ffffff;
+      border-radius: 3px;
+      opacity: 0.9;
+    }
+
+    .container {
+      max-width: 880px;
+      margin: 0 auto;
+      position: relative;
+      z-index: 2;
+    }
+
+    /* Top Sticky Bar */
+    .top-sticky-bar {
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      padding: 10px 16px;
+      box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+      border: 2px solid #ffffff;
+      margin-bottom: 14px;
+      backdrop-filter: blur(10px);
+      position: sticky;
+      top: 10px;
+      z-index: 100;
+    }
+
+    .progress-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 8px;
+    }
+
+    .star-score-pill {
+      background: linear-gradient(135deg, #ff7675, #e84393);
+      color: white;
+      font-weight: 900;
+      font-size: 0.88rem;
+      padding: 4px 12px;
+      border-radius: 999px;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      box-shadow: 0 3px 0 #d63031;
+      white-space: nowrap;
+    }
+
+    .progress-track {
+      flex: 1;
+      height: 14px;
+      background: #E2E8F0;
+      border-radius: 999px;
+      overflow: hidden;
+      position: relative;
+      box-shadow: inset 0 2px 4px rgba(0,0,0,0.1);
+    }
+
+    .progress-fill {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, #00C9A7, #00D26A);
+      border-radius: 999px;
+      transition: width 0.4s ease;
+    }
+
+    .progress-count-pill {
+      background: #00C9A7;
+      color: white;
+      font-weight: 900;
+      font-size: 0.88rem;
+      padding: 4px 12px;
+      border-radius: 999px;
+      box-shadow: 0 3px 0 #008770;
+      white-space: nowrap;
+    }
+
+    .teacher-contact-pill {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 6px;
+      font-size: 0.88rem;
+      font-weight: 700;
+      color: #2D3436;
+      padding-top: 4px;
+      border-top: 1px dashed #E2E8F0;
+    }
+
+    .teacher-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-weight: 800;
+      color: #6C5CE7;
+    }
+
+    .phone-tag {
+      background: #FF7675;
+      color: white;
+      padding: 2px 8px;
+      border-radius: 8px;
+      font-weight: 800;
+      font-size: 0.8rem;
+    }
+
+    /* Hero Banner */
+    .unit-hero-card {
+      background: #FFFFFF;
+      border-radius: 28px;
+      padding: 22px 24px;
+      margin-bottom: 20px;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+      border: 3px solid #FFFFFF;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-content {
+      max-width: 72%;
+    }
+
+    .unit-badge {
+      display: inline-block;
+      background: #0984E3;
+      color: white;
+      padding: 6px 14px;
+      border-radius: 999px;
+      font-size: 0.82rem;
+      font-weight: 900;
+      letter-spacing: 0.4px;
+      margin-bottom: 10px;
+      box-shadow: 0 3px 0 #0764ad;
+    }
+
+    .hero-title {
+      font-size: 1.85rem;
+      font-weight: 900;
+      color: #0984E3;
+      line-height: 1.25;
+      margin-bottom: 8px;
+    }
+
+    .hero-subtitle {
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: #636E72;
+      line-height: 1.5;
+    }
+
+    .hero-graphic {
+      width: 105px;
+      height: 105px;
+      background: radial-gradient(circle, #E1F0FF 60%, #CCE5FF 100%);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 6px 15px rgba(9, 132, 227, 0.15);
+      position: relative;
+    }
+
+    .hero-graphic svg {
+      width: 70px;
+      height: 70px;
+    }
+
+    /* Khung nhắc nhở bắt buộc */
+    .warning-box {
+      background: linear-gradient(135deg, #FFF9E6, #FFF0C2);
+      border: 3px solid #FDCB6E;
+      border-radius: 22px;
+      padding: 18px 22px;
+      margin-bottom: 24px;
+      box-shadow: 0 8px 20px rgba(253, 203, 110, 0.35);
+      position: relative;
+    }
+
+    .warning-title {
+      font-size: 1.08rem;
+      font-weight: 900;
+      color: #D35400;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 8px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .warning-text {
+      font-size: 0.98rem;
+      line-height: 1.6;
+      font-weight: 700;
+      color: #7A4100;
+    }
+
+    .warning-tag {
+      display: inline-block;
+      margin-top: 8px;
+      background: #E17055;
+      color: white;
+      padding: 3px 12px;
+      border-radius: 12px;
+      font-weight: 800;
+      font-size: 0.85rem;
+    }
+
+    /* Tiêu đề từng phần bài */
+    .exercise-divider {
+      background: linear-gradient(135deg, #6C5CE7, #8854C0);
+      color: white;
+      padding: 12px 20px;
+      border-radius: 18px;
+      margin: 28px 0 16px;
+      font-size: 1.05rem;
+      font-weight: 900;
+      box-shadow: 0 6px 0 #4834D4;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    /* Thẻ câu hỏi */
+    .question-card {
+      background: var(--card-bg);
+      border-radius: 26px;
+      padding: 22px 22px;
+      margin-bottom: 24px;
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.08);
+      border: 3px solid #FFFFFF;
+      transition: transform 0.2s ease;
+      position: relative;
+    }
+
+    .question-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 14px;
+    }
+
+    .question-num {
+      background: linear-gradient(135deg, #6c5ce7, #8854C0);
+      color: white;
+      font-size: 0.95rem;
+      font-weight: 900;
+      padding: 5px 16px;
+      border-radius: 14px;
+      box-shadow: 0 3px 0 #4834d4;
+    }
+
+    .question-type-badge {
+      font-size: 0.82rem;
+      font-weight: 800;
+      padding: 4px 14px;
+      border-radius: 12px;
+      background: #E8F8F5;
+      color: #00A884;
+      border: 1.5px solid #00C9A7;
+    }
+
+    .question-content {
+      font-size: 1.15rem;
+      font-weight: 800;
+      color: #2D3436;
+      line-height: 1.6;
+      margin-bottom: 18px;
+    }
+
+    /* Hộp tờ rơi / đoạn văn đọc hiểu */
+    .passage-box {
+      background: #F8F9FE;
+      border: 2px solid #E2E8F0;
+      border-radius: 20px;
+      padding: 18px 22px;
+      margin-bottom: 22px;
+      font-size: 1.04rem;
+      line-height: 1.7;
+      color: #2D3436;
+      font-weight: 600;
+    }
+
+    .passage-title {
+      text-align: center;
+      font-weight: 900;
+      font-size: 1.18rem;
+      color: #0984E3;
+      margin-bottom: 12px;
+      border-bottom: 2px dashed #CBD5E1;
+      padding-bottom: 8px;
+    }
+
+    /* Gạch chân từ vựng */
+    .phonetic-u, u {
+      color: #D63031 !important;
+      text-decoration: underline !important;
+      text-decoration-thickness: 3px !important;
+      text-underline-offset: 4px !important;
+      font-weight: 900;
+    }
+
+    /* Nút đáp án 3D */
+    .options-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 12px;
+    }
+
+    @media (min-width: 600px) {
+      .options-grid.two-cols {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+
+    .option-btn {
+      display: flex;
+      align-items: center;
+      width: 100%;
+      background: #FFFFFF;
+      border: 2.5px solid #E2E8F0;
+      border-radius: 18px;
+      padding: 12px 18px;
+      font-size: 1.05rem;
+      font-weight: 800;
+      color: #2D3436;
+      cursor: pointer;
+      text-align: left;
+      transition: transform 0.15s ease, background-color 0.2s ease, border-color 0.2s ease, box-shadow 0.15s ease;
+      box-shadow: 0 5px 0 #CBD5E1;
+      position: relative;
+      outline: none;
+    }
+
+    .option-btn:hover:not(:disabled) {
+      transform: translateY(-2px) scale(1.02);
+      border-color: #A29BFE;
+      box-shadow: 0 7px 0 #a29bfe;
+      background: #FDFBFF;
+    }
+
+    .option-btn:active:not(:disabled) {
+      transform: translateY(3px);
+      box-shadow: 0 2px 0 #CBD5E1;
+    }
+
+    .option-key {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 32px;
+      height: 32px;
+      min-width: 32px;
+      background: #F1F2F6;
+      color: #6C5CE7;
+      border-radius: 10px;
+      margin-right: 12px;
+      font-weight: 900;
+      font-size: 0.95rem;
+      border: 1.5px solid #DFE4EA;
+    }
+
+    .option-btn.correct {
+      background: #E8FBF0 !important;
+      border-color: var(--correct-green) !important;
+      color: #056636 !important;
+      box-shadow: 0 5px 0 var(--correct-green-shadow) !important;
+    }
+
+    .option-btn.correct .option-key {
+      background: var(--correct-green);
+      color: white;
+      border-color: var(--correct-green-shadow);
+    }
+
+    .option-btn.wrong {
+      background: #FFF0F2 !important;
+      border-color: var(--wrong-red) !important;
+      color: #A31221 !important;
+      box-shadow: 0 5px 0 var(--wrong-red-shadow) !important;
+      animation: shake 0.45s ease-in-out;
+    }
+
+    .option-btn.wrong .option-key {
+      background: var(--wrong-red);
+      color: white;
+      border-color: var(--wrong-red-shadow);
+    }
+
+    @keyframes shake {
+      0%, 100% { transform: translateX(0); }
+      20%, 60% { transform: translateX(-8px); }
+      40%, 80% { transform: translateX(8px); }
+    }
+
+    /* Khung giải thích siêu chi tiết (Chuẩn ảnh 1) */
+    .explanation-box {
+      margin-top: 20px;
+      background: #FFFFFF;
+      border: 2px dashed #A29BFE;
+      border-radius: 22px;
+      padding: 18px 20px;
+      animation: slideDown 0.35s ease-out;
+      box-shadow: 0 8px 24px rgba(108, 92, 231, 0.08);
+    }
+
+    @keyframes slideDown {
+      from { opacity: 0; transform: translateY(-10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .exp-title {
+      font-size: 1.15rem;
+      font-weight: 900;
+      color: #E65100;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      margin-bottom: 12px;
+      letter-spacing: 0.5px;
+    }
+
+    .exp-translation-bubble {
+      background: #FFF9E6;
+      border-left: 5px solid #FDCB6E;
+      border-radius: 14px;
+      padding: 10px 14px;
+      font-size: 0.96rem;
+      font-weight: 700;
+      color: #2D3436;
+      line-height: 1.5;
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .exp-translation-bubble .icon {
+      font-size: 1.25rem;
+    }
+
+    .exp-section-title {
+      font-size: 0.98rem;
+      font-weight: 900;
+      color: #2D3436;
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .analysis-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 10px;
+      margin-bottom: 16px;
+    }
+
+    @media (min-width: 620px) {
+      .analysis-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+
+    .analysis-card {
+      background: #FFFFFF;
+      border: 1.8px solid #E2E8F0;
+      border-radius: 16px;
+      padding: 10px 14px;
+      font-size: 0.92rem;
+      line-height: 1.5;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.03);
+    }
+
+    .analysis-word {
+      font-weight: 900;
+      font-size: 1rem;
+      color: #0984E3;
+      margin-right: 4px;
+    }
+
+    .analysis-word.green {
+      color: #00B894;
+    }
+
+    .badge-pill {
+      display: inline-block;
+      padding: 2px 8px;
+      border-radius: 8px;
+      font-size: 0.76rem;
+      font-weight: 800;
+      margin: 0 4px;
+      vertical-align: middle;
+    }
+
+    .badge-wrong {
+      background: #FEE2E2;
+      color: #DC2626;
+      border: 1px solid #FCA5A5;
+    }
+
+    .badge-structure {
+      background: #EDE9FE;
+      color: #6D28D9;
+      border: 1px solid #DDD6FE;
+    }
+
+    .badge-correct {
+      background: #D1FAE5;
+      color: #059669;
+      border: 1px solid #A7F3D0;
+    }
+
+    .analysis-meaning {
+      font-weight: 700;
+      color: #7A4100;
+    }
+
+    .exp-rule-row {
+      margin-bottom: 12px;
+      font-size: 0.96rem;
+      line-height: 1.6;
+      color: #2D3436;
+      font-weight: 600;
+    }
+
+    .exp-rule-row .check-label {
+      font-weight: 900;
+      color: #00A884;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      margin-right: 6px;
+    }
+
+    .exp-rule-pill {
+      background: #FFF3CD;
+      color: #856404;
+      font-weight: 800;
+      padding: 3px 10px;
+      border-radius: 10px;
+      margin: 0 4px;
+      display: inline-block;
+    }
+
+    .exp-highlight-green {
+      background: #E8F8F5;
+      color: #00A884;
+      font-weight: 900;
+      padding: 2px 8px;
+      border-radius: 8px;
+      display: inline-block;
+      margin: 0 2px;
+    }
+
+    .exp-wrong-row {
+      font-size: 0.96rem;
+      line-height: 1.6;
+      color: #2D3436;
+      font-weight: 600;
+    }
+
+    .exp-wrong-row .cross-label {
+      font-weight: 900;
+      color: #D63031;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      margin-right: 6px;
+    }
+
+    .exp-wrong-tag {
+      background: #FFEAEA;
+      color: #D63031;
+      font-weight: 800;
+      padding: 2px 8px;
+      border-radius: 8px;
+      display: inline-block;
+      margin: 0 3px;
+    }
+
+    /* Submit Section */
+    .submit-section {
+      text-align: center;
+      margin-top: 36px;
+      margin-bottom: 50px;
+    }
+
+    .submit-btn {
+      background: linear-gradient(135deg, #00C9A7, #00B894);
+      color: white;
+      font-size: 1.25rem;
+      font-weight: 900;
+      padding: 16px 48px;
+      border: none;
+      border-radius: 999px;
+      box-shadow: 0 8px 0 #008770, 0 15px 25px rgba(0, 201, 167, 0.4);
+      cursor: pointer;
+      transition: all 0.2s ease;
+      letter-spacing: 0.5px;
+    }
+
+    .submit-btn:hover {
+      transform: translateY(-3px) scale(1.03);
+      box-shadow: 0 11px 0 #008770, 0 18px 30px rgba(0, 201, 167, 0.5);
+    }
+
+    .submit-btn:active {
+      transform: translateY(4px);
+      box-shadow: 0 4px 0 #008770;
+    }
+
+    /* Result Modal */
+    .result-modal {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(0, 0, 0, 0.65);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 2000;
+      padding: 16px;
+      backdrop-filter: blur(5px);
+    }
+
+    .result-card {
+      background: white;
+      border-radius: 30px;
+      padding: 32px 26px;
+      max-width: 500px;
+      width: 100%;
+      text-align: center;
+      box-shadow: 0 20px 50px rgba(0,0,0,0.3);
+      position: relative;
+      animation: popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+
+    @keyframes popIn {
+      from { transform: scale(0.85); opacity: 0; }
+      to { transform: scale(1); opacity: 1; }
+    }
+
+    .result-emoji {
+      font-size: 3.5rem;
+      margin-bottom: 10px;
+      animation: bounce 1.5s infinite;
+    }
+
+    @keyframes bounce {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
+    }
+
+    .result-score {
+      font-size: 2.2rem;
+      font-weight: 900;
+      color: #6C5CE7;
+      margin-bottom: 12px;
+    }
+
+    .result-feedback {
+      background: #F8F9FE;
+      border-radius: 18px;
+      padding: 16px;
+      font-size: 1.05rem;
+      line-height: 1.6;
+      font-weight: 700;
+      color: #2D3436;
+      margin-bottom: 24px;
+      border: 2px dashed #A29BFE;
+    }
+
+    .retry-btn {
+      background: linear-gradient(135deg, #FDCB6E, #E17055);
+      color: white;
+      font-size: 1.1rem;
+      font-weight: 900;
+      padding: 12px 36px;
+      border: none;
+      border-radius: 999px;
+      box-shadow: 0 6px 0 #D35400;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .retry-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 0 #D35400;
+    }
+
+    .retry-btn:active {
+      transform: translateY(3px);
+      box-shadow: 0 3px 0 #D35400;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Background Sky & City -->
+  <div class="sky-decorations">
+    <div class="sun-glow"></div>
+    <svg class="floating-cloud cloud-1" viewBox="0 0 100 60"><path d="M20,40 Q10,40 10,30 Q10,20 25,20 Q30,10 45,10 Q60,10 65,20 Q80,20 80,30 Q90,30 90,40 Q90,50 80,50 L20,50 Z"/></svg>
+    <svg class="floating-cloud cloud-2" viewBox="0 0 100 60"><path d="M20,40 Q10,40 10,30 Q10,20 25,20 Q30,10 45,10 Q60,10 65,20 Q80,20 80,30 Q90,30 90,40 Q90,50 80,50 L20,50 Z"/></svg>
+  </div>
+  <div class="city-backdrop"></div>
+  <div class="bottom-road">
+    <div class="road-curb"></div>
+    <div class="road-line"></div><div class="road-line"></div><div class="road-line"></div><div class="road-line"></div><div class="road-line"></div><div class="road-line"></div><div class="road-line"></div>
+  </div>
+
+  <div class="container">
+
+    <!-- Top Sticky Bar -->
+    <div class="top-sticky-bar">
+      <div class="progress-row">
+        <div class="star-score-pill">
+          <span>⭐</span> <span id="star-score-text">0 / 40</span>
+        </div>
+        <div class="progress-track">
+          <div class="progress-fill" id="progress-bar-fill"></div>
+        </div>
+        <div class="progress-count-pill" id="progress-ratio-text">0 / 40</div>
+      </div>
+      <div class="teacher-contact-pill">
+        <div class="teacher-badge">
+          <span>👩‍🏫</span> Giáo viên tạo: <strong>Ms Lê Hằng English</strong>
+        </div>
+        <div>
+          <span>Chuyên luyện thi HSG & Luyện thi Đại học / Vào 10 chất lượng cao</span> • <span class="phone-tag">☎️ 0936.322.809</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Hero Card Banner -->
+    <div class="unit-hero-card">
+      <div class="hero-content">
+        <div class="unit-badge">🚆 PRACTICE TEST 2 · HEALTHY LIVING & GENERATION GAP</div>
+        <h1 class="hero-title">Practice Test 2 Mastery</h1>
+        <div class="hero-subtitle">Đọc điền tờ rơi (Leaflet) | Sắp xếp đoạn văn & Thư | Đọc điền khuyết mệnh đề | Đọc hiểu chuyên sâu | Tự luận Viết lại câu & Từ loại</div>
+      </div>
+      <div class="hero-graphic">
+        <svg viewBox="0 0 100 100">
+          <rect x="25" y="20" width="30" height="70" rx="4" fill="#0984E3"/>
+          <polygon points="25,20 40,5 55,20" fill="#0984E3"/>
+          <rect x="60" y="45" width="25" height="45" rx="3" fill="#74B9FF"/>
+          <circle cx="33" cy="32" r="3" fill="#FFF"/><circle cx="47" cy="32" r="3" fill="#FFF"/>
+          <circle cx="33" cy="46" r="3" fill="#FFF"/><circle cx="47" cy="46" r="3" fill="#FFF"/>
+          <circle cx="33" cy="60" r="3" fill="#FFF"/><circle cx="47" cy="60" r="3" fill="#FFF"/>
+          <circle cx="33" cy="74" r="3" fill="#FFF"/><circle cx="47" cy="74" r="3" fill="#FFF"/>
+          <circle cx="68" cy="56" r="2.5" fill="#FFF"/><circle cx="77" cy="56" r="2.5" fill="#FFF"/>
+          <circle cx="68" cy="68" r="2.5" fill="#FFF"/><circle cx="77" cy="68" r="2.5" fill="#FFF"/>
+        </svg>
+      </div>
+    </div>
+
+    <!-- Khung thông báo bắt buộc -->
+    <div class="warning-box">
+      <div class="warning-title">⚠️ LỜI NHẮC CỰC KỲ QUAN TRỌNG ⚠️</div>
+      <div class="warning-text">
+        Chỉ có đọc kỹ giải thích ngay sau mỗi câu, sau đó ghi lại từ vựng/cấu trúc mới vào vở để học thì mới thực sự giỏi lên.<br>
+        Làm cho xong mà không đọc giải thích hay đọc qua loa không ghi chép thì chỉ tốn thời gian vô ích!
+      </div>
+      <div class="warning-tag">Kéo tới đâu, làm tới đó! *</div>
+    </div>
+
+    <!-- Nơi hiển thị các câu hỏi -->
+    <div id="quiz-container"></div>
+
+    <!-- Nút Nộp Bài -->
+    <div class="submit-section">
+      <button class="submit-btn" onclick="submitQuiz()">🎉 NỘP BÀI KIỂM TRA</button>
+    </div>
+
+  </div>
+
+  <!-- Popup kết quả -->
+  <div id="result-modal" class="result-modal">
+    <div class="result-card">
+      <div id="result-emoji" class="result-emoji">🌟</div>
+      <div id="result-score" class="result-score">0 / 40</div>
+      <div id="result-feedback" class="result-feedback"></div>
+      <button class="retry-btn" onclick="retryQuiz()">🔄 Làm lại bài</button>
+    </div>
+  </div>
+
+  <script>
+    // DỮ LIỆU ĐẦY ĐỦ 40 CÂU HỎI TỪ ĐỀ PRACTICE TEST 2
+    const quizData = [
+      // BÀI 1: LEAFLET 1 - STAYING HEALTHY AT COLLEGE (Câu 1 - 6)
+      {
+        id: 1,
+        exTitle: "PRACTICE TEST 2 - Read the following leaflet and choose the option that best fits each of the numbered blanks from 1 to 6.",
+        question: "<div class='passage-box'><div class='passage-title'>🥗 Staying Healthy at College 🥗</div>There are a few reasons why first-year college students often gain weight. The most common reason is that many college students just don't eat right. However, it's (1) ________ to know that it's really quite easy for students to avoid gaining weight.<br><b>Making the wrong choices</b><br>College kitchens serve many kinds of food. New students often gain weight because they are choosing to eat (2) ________ of unhealthy food, especially when their parents are not around to advise them on what they should eat. (3) ________ students may also buy snacks to eat while they are studying. Furthermore, college students often have less time for walking, running, and doing sports because they are busy with their schoolwork or other college activities.<br><b>How to stay healthy</b><br>✓ Here are a few ideas for staying healthy at college:<br>✓ Eat only when you are hungry, not when you're bored.<br>✓ Always eat at the dinner table and never in front of the TV or the computer.<br>✓ Choose water over sugary drinks.<br>✓ Try to (4) ________ your room regularly for some fresh air and exercise.<br>(5) ________ a deal with your friends to try and eat healthy food together. Walking, running, and playing sports is always more fun with friends, too. Help each other eat right and stay fit, and you can have a (6) ________.</div>Question 1: However, it's (1) ________ to know that it's really quite easy for students to avoid gaining weight.",
+        options: [
+          { key: "A", text: "encouraging", raw: "encouraging" },
+          { key: "B", text: "encouragement", raw: "encouragement" },
+          { key: "C", text: "encouragingly", raw: "encouragingly" },
+          { key: "D", text: "encouraged", raw: "encouraged" }
+        ],
+        correct: "A",
+        explanation: {
+          translation: "Tuy nhiên, thật đáng khích lệ khi biết rằng sinh viên thực sự khá dễ dàng để tránh việc bị tăng cân.",
+          cards: [
+            { word: "encouraging", isCorrect: true, badgeText: "tính từ đuôi -ing", badgeType: "badge-correct", meaning: "= đáng khích lệ, mang tính động viên (mô tả tính chất sự việc)" },
+            { word: "encouragement", isCorrect: false, badgeText: "danh từ", badgeType: "badge-wrong", meaning: "= sự khích lệ" },
+            { word: "encouragingly", isCorrect: false, badgeText: "trạng từ", badgeType: "badge-wrong", meaning: "= một cách đầy khích lệ" },
+            { word: "encouraged", isCorrect: false, badgeText: "tính từ đuôi -ed", badgeType: "badge-wrong", meaning: "= cảm thấy được khích lệ (chỉ dùng cho cảm xúc con người)" }
+          ],
+          whyCorrect: { ruleTitle: "Cấu trúc Chủ ngữ giả It is + adj + to V", detail: "Sau 'It is' cần một tính từ mô tả tính chất của thông tin 'to know that...' → Dùng tính từ phân từ hiện tại <span class='exp-highlight-green'>encouraging</span> (đáng khích lệ)." },
+          whyWrong: [
+            { word: "B, C", reason: "danh từ và trạng từ không phù hợp vị trí tính từ trong cấu trúc It's + adj + to V." },
+            { word: "D", reason: "encouraged dùng để diễn tả cảm xúc của người, không dùng cho chủ ngữ giả 'It'." }
+          ]
+        }
+      },
+      {
+        id: 2,
+        exTitle: "PRACTICE TEST 2 - Read the following leaflet and choose the option that best fits each of the numbered blanks from 1 to 6.",
+        question: "Question 2: New students often gain weight because they are choosing to eat (2) ________ of unhealthy food",
+        options: [
+          { key: "A", text: "lack", raw: "lack" },
+          { key: "B", text: "degree", raw: "degree" },
+          { key: "C", text: "number", raw: "number" },
+          { key: "D", text: "plenty", raw: "plenty" }
+        ],
+        correct: "D",
+        explanation: {
+          translation: "Các tân sinh viên thường tăng cân vì họ lựa chọn ăn quá nhiều đồ ăn không lành mạnh.",
+          cards: [
+            { word: "lack", isCorrect: false, badgeText: "thiếu hụt", badgeType: "badge-wrong", meaning: "= a lack of (thiếu đồ ăn xấu thì không thể tăng cân)" },
+            { word: "degree", isCorrect: false, badgeText: "mức độ", badgeType: "badge-wrong", meaning: "= a degree of (mức độ)" },
+            { word: "number", isCorrect: false, badgeText: "đi với N số nhiều", badgeType: "badge-wrong", meaning: "= a number of + N đếm được số nhiều ('food' không đếm được)" },
+            { word: "plenty", isCorrect: true, badgeText: "lượng từ chuẩn", badgeType: "badge-correct", meaning: "= plenty of + N không đếm được / số nhiều (rất nhiều)" }
+          ],
+          whyCorrect: { ruleTitle: "Lượng từ đi với danh từ không đếm được 'food'", detail: "Cụm định lượng không cần mạo từ đứng trước và đi được với danh từ không đếm được 'unhealthy food': <span class='exp-highlight-green'>plenty of</span> (rất nhiều)." },
+          whyWrong: [
+            { word: "A, B, C", reason: "cả 3 từ đều cần mạo từ 'a' phía trước (a lack of, a degree of, a number of) và 'number' không đi với danh từ không đếm được." }
+          ]
+        }
+      },
+      {
+        id: 3,
+        exTitle: "PRACTICE TEST 2 - Read the following leaflet and choose the option that best fits each of the numbered blanks from 1 to 6.",
+        question: "Question 3: (3) ________ students may also buy snacks to eat while they are studying.",
+        options: [
+          { key: "A", text: "Each", raw: "Each" },
+          { key: "B", text: "Some", raw: "Some" },
+          { key: "C", text: "Others", raw: "Others" },
+          { key: "D", text: "The others", raw: "The others" }
+        ],
+        correct: "B",
+        explanation: {
+          translation: "Một số sinh viên cũng có thể mua đồ ăn vặt để ăn trong lúc đang học bài.",
+          cards: [
+            { word: "Each", isCorrect: false, badgeText: "+ N số ít", badgeType: "badge-wrong", meaning: "= mỗi (đi với danh từ đếm được số ít)" },
+            { word: "Some", isCorrect: true, badgeText: "+ N số nhiều", badgeType: "badge-correct", meaning: "= một vài, một số (Some students)" },
+            { word: "Others", isCorrect: false, badgeText: "đại từ độc lập", badgeType: "badge-wrong", meaning: "= những người khác (không có danh từ theo sau)" },
+            { word: "The others", isCorrect: false, badgeText: "đại từ độc lập", badgeType: "badge-wrong", meaning: "= những người còn lại (đứng một mình)" }
+          ],
+          whyCorrect: { ruleTitle: "Từ hạn định đi trước danh từ đếm được số nhiều", detail: "Đứng trước danh từ số nhiều <span class='exp-highlight-green'>'students'</span> là từ chỉ định lượng <span class='exp-highlight-green'>Some</span> (Một số sinh viên)." },
+          whyWrong: [
+            { word: "Each", reason: "chỉ đi với danh từ số ít (Each student)." },
+            { word: "Others, The others", reason: "là đại từ, tuyệt đối không cộng thêm danh từ 'students' ở phía sau." }
+          ]
+        }
+      },
+      {
+        id: 4,
+        exTitle: "PRACTICE TEST 2 - Read the following leaflet and choose the option that best fits each of the numbered blanks from 1 to 6.",
+        question: "Question 4: Try to (4) ________ your room regularly for some fresh air and exercise.",
+        options: [
+          { key: "A", text: "put up with", raw: "put up with" },
+          { key: "B", text: "get out of", raw: "get out of" },
+          { key: "C", text: "get on with", raw: "get on with" },
+          { key: "D", text: "drop out of", raw: "drop out of" }
+        ],
+        correct: "B",
+        explanation: {
+          translation: "Hãy cố gắng bước ra khỏi phòng của bạn thường xuyên để hít thở không khí trong lành và tập thể dục.",
+          cards: [
+            { word: "put up with", isCorrect: false, badgeText: "chịu đựng", badgeType: "badge-structure", meaning: "= chịu đựng điều gì khó chịu" },
+            { word: "get out of", isCorrect: true, badgeText: "ra khỏi", badgeType: "badge-correct", meaning: "= đi ra khỏi (get out of your room)" },
+            { word: "get on with", isCorrect: false, badgeText: "hòa thuận", badgeType: "badge-structure", meaning: "= có mối quan hệ tốt với ai" },
+            { word: "drop out of", isCorrect: false, badgeText: "bỏ học", badgeType: "badge-structure", meaning: "= bỏ học giữa chừng (drop out of school/college)" }
+          ],
+          whyCorrect: { ruleTitle: "Cụm động từ chỉ sự di chuyển ra ngoài", detail: "Để có 'fresh air and exercise' (không khí trong lành và tập thể dục), bạn phải bước ra khỏi phòng: <span class='exp-highlight-green'>get out of your room</span>." },
+          whyWrong: [
+            { word: "A, C, D", reason: "sai hoàn toàn về mặt ngữ nghĩa khi ghép với 'your room'." }
+          ]
+        }
+      },
+      {
+        id: 5,
+        exTitle: "PRACTICE TEST 2 - Read the following leaflet and choose the option that best fits each of the numbered blanks from 1 to 6.",
+        question: "Question 5: (5) ________ a deal with your friends to try and eat healthy food together.",
+        options: [
+          { key: "A", text: "Take", raw: "Take" },
+          { key: "B", text: "Keep", raw: "Keep" },
+          { key: "C", text: "Book", raw: "Book" },
+          { key: "D", text: "Make", raw: "Make" }
+        ],
+        correct: "D",
+        explanation: {
+          translation: "Hãy lập một thỏa thuận/giao kèo với bạn bè để cùng nhau cố gắng ăn thực phẩm lành mạnh.",
+          cards: [
+            { word: "Take", isCorrect: false, badgeText: "động từ", badgeType: "badge-wrong", meaning: "= cầm, lấy" },
+            { word: "Keep", isCorrect: false, badgeText: "động từ", badgeType: "badge-wrong", meaning: "= giữ gìn" },
+            { word: "Book", isCorrect: false, badgeText: "động từ", badgeType: "badge-wrong", meaning: "= đặt vé, đặt phòng" },
+            { word: "Make", isCorrect: true, badgeText: "collocation chuẩn", badgeType: "badge-correct", meaning: "= Make a deal (thỏa thuận, giao kèo với ai)" }
+          ],
+          whyCorrect: { ruleTitle: "Cụm từ cố định (Collocation) với Deal", detail: "Cụm từ cố định: <span class='exp-highlight-green'>make a deal with sb</span> (đưa ra thỏa thuận, giao kèo cùng ai)." },
+          whyWrong: [
+            { word: "Take, Keep, Book", reason: "không kết hợp với 'a deal with sb' để mang nghĩa lập giao kèo." }
+          ]
+        }
+      },
+      {
+        id: 6,
+        exTitle: "PRACTICE TEST 2 - Read the following leaflet and choose the option that best fits each of the numbered blanks from 1 to 6.",
+        question: "Question 6: Help each other eat right and stay fit, and you can have a (6) ________.",
+        options: [
+          { key: "A", text: "healthy year freshman", raw: "healthy year freshman" },
+          { key: "B", text: "year healthy freshman", raw: "year healthy freshman" },
+          { key: "C", text: "freshman healthy year", raw: "freshman healthy year" },
+          { key: "D", text: "healthy freshman year", raw: "healthy freshman year" }
+        ],
+        correct: "D",
+        explanation: {
+          translation: "Hãy giúp đỡ nhau ăn uống đúng cách và giữ dáng, và bạn có thể có một năm đầu đại học thật khỏe mạnh.",
+          cards: [
+            { word: "healthy year freshman", isCorrect: false, badgeText: "ngược danh từ chính", badgeType: "badge-wrong", meaning: "= đảo lộn vị trí danh từ ghép" },
+            { word: "year healthy freshman", isCorrect: false, badgeText: "sai vị trí tính từ", badgeType: "badge-wrong", meaning: "= tính từ healthy bị kẹp sai chỗ" },
+            { word: "freshman healthy year", isCorrect: false, badgeText: "tách danh từ ghép", badgeType: "badge-wrong", meaning: "= chèn healthy vào giữa cụm danh từ ghép freshman year" },
+            { word: "healthy freshman year", isCorrect: true, badgeText: "chuẩn trật tự từ", badgeType: "badge-correct", meaning: "= Adj (healthy) + Danh từ ghép (freshman year: năm nhất đại học)" }
+          ],
+          whyCorrect: { ruleTitle: "Trật tự Tính từ và Danh từ ghép", detail: "Cụm danh từ cố định chỉ 'năm thứ nhất đại học' là <span class='exp-highlight-green'>freshman year</span>. Tính từ chỉ phẩm chất/trạng thái <span class='exp-highlight-green'>healthy</span> đứng trước bổ nghĩa cho toàn bộ cụm danh từ ghép đó → <span class='exp-highlight-green'>a healthy freshman year</span>." },
+          whyWrong: [
+            { word: "A, B, C", reason: "sắp xếp sai trật tự tính từ và danh từ ghép." }
+          ]
+        }
+      },
+
+      // BÀI 2: LEAFLET 2 - UNDERSTANDING THE GENERATION GAP (Câu 7 - 12)
+      {
+        id: 7,
+        exTitle: "PRACTICE TEST 2 - Read the following leaflet and choose the option that best fits each of the numbered blanks from 7 to 12.",
+        question: "<div class='passage-box'><div class='passage-title'>🤝 Understanding the Generation Gap 🤝</div>In today's fast-paced world, the concept of the generation gap has become increasingly (7) ________. It reflects the differences in values between various age groups, often leading to misunderstandings and conflicts. While older generations may value stability and tradition, younger generations often prioritize innovation and change.<br>This divergence can be particularly evident in interactions and communication (8) ________ where technology plays a significant role. (9) ________ while the younger demographic tends to favor social media platforms for engagement, their elders might prefer face-to-face conversations or emails.<br>Such differences can (10) ________ tension within families and workplaces, prompting the need for effective dialogue. Bridging this gap is crucial for fostering understanding and collaboration across age groups. How can we approach this challenge? By recognizing that (11) ________ perspectives are valid, we can work towards a more harmonious (12) ________.</div>Question 7: In today's fast-paced world, the concept of the generation gap has become increasingly (7) ________.",
+        options: [
+          { key: "A", text: "prevalent", raw: "prevalent" },
+          { key: "B", text: "different", raw: "different" },
+          { key: "C", text: "social", raw: "social" },
+          { key: "D", text: "traditional", raw: "traditional" }
+        ],
+        correct: "A",
+        explanation: {
+          translation: "Trong thế giới nhịp độ nhanh ngày nay, khái niệm khoảng cách thế hệ ngày càng trở nên phổ biến/thịnh hành.",
+          cards: [
+            { word: "prevalent", isCorrect: true, badgeText: "tính từ chuẩn", badgeType: "badge-correct", meaning: "= phổ biến, thường thấy khắp nơi" },
+            { word: "different", isCorrect: false, badgeText: "khác biệt", badgeType: "badge-structure", meaning: "= khác nhau" },
+            { word: "social", isCorrect: false, badgeText: "xã hội", badgeType: "badge-structure", meaning: "= thuộc về xã hội" },
+            { word: "traditional", isCorrect: false, badgeText: "truyền thống", badgeType: "badge-structure", meaning: "= thuộc về truyền thống" }
+          ],
+          whyCorrect: { ruleTitle: "Từ vựng nâng cao mô tả xu hướng xã hội", detail: "Khái niệm khoảng cách thế hệ xuất hiện ngày càng nhiều trong xã hội hiện đại → Dùng tính từ <span class='exp-highlight-green'>prevalent</span> (phổ biến, lan rộng)." },
+          whyWrong: [
+            { word: "B, C, D", reason: "không phù hợp ngữ nghĩa khi nói một khái niệm 'trở nên ngày càng phổ biến'." }
+          ]
+        }
+      },
+      {
+        id: 8,
+        exTitle: "PRACTICE TEST 2 - Read the following leaflet and choose the option that best fits each of the numbered blanks from 7 to 12.",
+        question: "Question 8: This divergence can be particularly evident in interactions and communication (8) ________ where technology plays a significant role.",
+        options: [
+          { key: "A", text: "kinds", raw: "kinds" },
+          { key: "B", text: "styles", raw: "styles" },
+          { key: "C", text: "sorts", raw: "sorts" },
+          { key: "D", text: "types", raw: "types" }
+        ],
+        correct: "B",
+        explanation: {
+          translation: "Sự khác biệt này có thể thấy đặc biệt rõ ràng trong các tương tác và phong cách giao tiếp nơi công nghệ đóng một vai trò quan trọng.",
+          cards: [
+            { word: "kinds", isCorrect: false, badgeText: "loại", badgeType: "badge-wrong", meaning: "= các thể loại (kinds of...)" },
+            { word: "styles", isCorrect: true, badgeText: "collocation chuẩn", badgeType: "badge-correct", meaning: "= phong cách giao tiếp (communication styles)" },
+            { word: "sorts", isCorrect: false, badgeText: "thứ/loại", badgeType: "badge-wrong", meaning: "= các loại" },
+            { word: "types", isCorrect: false, badgeText: "kiểu", badgeType: "badge-wrong", meaning: "= các kiểu" }
+          ],
+          whyCorrect: { ruleTitle: "Thuật ngữ Phong cách giao tiếp", detail: "Cụm danh từ cố định trong giao tiếp xã hội: <span class='exp-highlight-green'>communication styles</span> (phong cách/cách thức giao tiếp)." },
+          whyWrong: [
+            { word: "A, C, D", reason: "thường dùng 'types/kinds/sorts of communication' chứ không đứng sau danh từ communication như 'styles'." }
+          ]
+        }
+      },
+      {
+        id: 9,
+        exTitle: "PRACTICE TEST 2 - Read the following leaflet and choose the option that best fits each of the numbered blanks from 7 to 12.",
+        question: "Question 9: (9) ________, while the younger demographic tends to favor social media platforms for engagement, their elders might prefer face-to-face conversations or emails.",
+        options: [
+          { key: "A", text: "After all", raw: "After all" },
+          { key: "B", text: "In case", raw: "In case" },
+          { key: "C", text: "Along with", raw: "Along with" },
+          { key: "D", text: "For instance", raw: "For instance" }
+        ],
+        correct: "D",
+        explanation: {
+          translation: "Ví dụ như, trong khi giới trẻ có xu hướng ưa chuộng mạng xã hội để tương tác, thì người lớn tuổi lại thích trò chuyện trực tiếp hoặc qua email hơn.",
+          cards: [
+            { word: "After all", isCorrect: false, badgeText: "sau cùng thì", badgeType: "badge-wrong", meaning: "= suy cho cùng, rốt cuộc" },
+            { word: "In case", isCorrect: false, badgeText: "phòng khi", badgeType: "badge-wrong", meaning: "= phòng trường hợp" },
+            { word: "Along with", isCorrect: false, badgeText: "cùng với (+ N)", badgeType: "badge-wrong", meaning: "= đi kèm với cụm danh từ" },
+            { word: "For instance", isCorrect: true, badgeText: "nêu ví dụ", badgeType: "badge-correct", meaning: "= Ví dụ như (= For example)" }
+          ],
+          whyCorrect: { ruleTitle: "Liên từ đưa ra ví dụ minh họa", detail: "Câu trước nói về sự khác biệt trong phong cách giao tiếp công nghệ, câu sau nêu dẫn chứng cụ thể (người trẻ dùng mạng xã hội, người già dùng email/nói chuyện trực tiếp) → Dùng <span class='exp-highlight-green'>For instance</span> (Chẳng hạn như / Ví dụ là)." },
+          whyWrong: [
+            { word: "A, B, C", reason: "không mang chức năng giới thiệu ví dụ minh họa cho câu đứng trước." }
+          ]
+        }
+      },
+      {
+        id: 10,
+        exTitle: "PRACTICE TEST 2 - Read the following leaflet and choose the option that best fits each of the numbered blanks from 7 to 12.",
+        question: "Question 10: Such differences can (10) ________ tension within families and workplaces, prompting the need for effective dialogue.",
+        options: [
+          { key: "A", text: "consist of", raw: "consist of" },
+          { key: "B", text: "refer to", raw: "refer to" },
+          { key: "C", text: "result in", raw: "result in" },
+          { key: "D", text: "absorbed in", raw: "absorbed in" }
+        ],
+        correct: "C",
+        explanation: {
+          translation: "Những sự khác biệt như vậy có thể dẫn đến sự căng thẳng trong gia đình và nơi làm việc, thúc đẩy nhu cầu cần có các cuộc đối thoại hiệu quả.",
+          cards: [
+            { word: "consist of", isCorrect: false, badgeText: "bao gồm", badgeType: "badge-structure", meaning: "= bao gồm các thành phần" },
+            { word: "refer to", isCorrect: false, badgeText: "đề cập tới", badgeType: "badge-structure", meaning: "= ám chỉ, nhắc đến" },
+            { word: "result in", isCorrect: true, badgeText: "dẫn đến", badgeType: "badge-correct", meaning: "= gây ra, dẫn đến kết quả (= lead to / cause)" },
+            { word: "absorbed in", isCorrect: false, badgeText: "say mê", badgeType: "badge-wrong", meaning: "= mải mê, đắm chìm vào (be absorbed in)" }
+          ],
+          whyCorrect: { ruleTitle: "Cụm động từ chỉ nguyên nhân - kết quả", detail: "<span class='exp-highlight-green'>result in sth</span> = lead to / cause sth (dẫn đến, gây ra sự căng thẳng)." },
+          whyWrong: [
+            { word: "consist of, refer to", reason: "sai nghĩa trong câu." },
+            { word: "absorbed in", reason: "sau động từ khuyết thiếu 'can' phải là động từ nguyên mẫu, không dùng phân từ 'absorbed'." }
+          ]
+        }
+      },
+      {
+        id: 11,
+        exTitle: "PRACTICE TEST 2 - Read the following leaflet and choose the option that best fits each of the numbered blanks from 7 to 12.",
+        question: "Question 11: By recognizing that (11) ________ perspectives are valid, we can work towards a more harmonious...",
+        options: [
+          { key: "A", text: "both", raw: "both" },
+          { key: "B", text: "much", raw: "much" },
+          { key: "C", text: "none", raw: "none" },
+          { key: "D", text: "each", raw: "each" }
+        ],
+        correct: "A",
+        explanation: {
+          translation: "Bằng cách công nhận rằng góc nhìn của cả hai phía (thế hệ trẻ và thế hệ lớn tuổi) đều có giá trị hợp lý...",
+          cards: [
+            { word: "both", isCorrect: true, badgeText: "+ N số nhiều", badgeType: "badge-correct", meaning: "= cả hai (both perspectives are valid)" },
+            { word: "much", isCorrect: false, badgeText: "+ N không đếm được", badgeType: "badge-wrong", meaning: "= nhiều (không đi với danh từ số nhiều perspectives)" },
+            { word: "none", isCorrect: false, badgeText: "đại từ", badgeType: "badge-wrong", meaning: "= không cái nào (none of the...)" },
+            { word: "each", isCorrect: false, badgeText: "+ N số ít", badgeType: "badge-wrong", meaning: "= mỗi (đi với perspective số ít và động từ is)" }
+          ],
+          whyCorrect: { ruleTitle: "Lượng từ chỉ hai đối tượng đi với danh từ số nhiều", detail: "Bài viết đang đối chiếu 2 thế hệ (older generations và younger generations), phía sau là danh từ số nhiều <span class='exp-highlight-green'>'perspectives'</span> và động từ <span class='exp-highlight-green'>'are'</span> → Dùng <span class='exp-highlight-green'>both</span> (cả hai góc nhìn)." },
+          whyWrong: [
+            { word: "much", reason: "chỉ đi với danh từ không đếm được." },
+            { word: "none", reason: "không đứng trực tiếp trước danh từ mà không có 'of'." },
+            { word: "each", reason: "đi với danh từ số ít." }
+          ]
+        }
+      },
+      {
+        id: 12,
+        exTitle: "PRACTICE TEST 2 - Read the following leaflet and choose the option that best fits each of the numbered blanks from 7 to 12.",
+        question: "Question 12: ...we can work towards a more harmonious (12) ________.",
+        options: [
+          { key: "A", text: "individualism", raw: "individualism" },
+          { key: "B", text: "relationship", raw: "relationship" },
+          { key: "C", text: "characteristic", raw: "characteristic" },
+          { key: "D", text: "disagreement", raw: "disagreement" }
+        ],
+        correct: "B",
+        explanation: {
+          translation: "...chúng ta có thể hướng tới một mối quan hệ hòa hợp hơn.",
+          cards: [
+            { word: "individualism", isCorrect: false, badgeText: "chủ nghĩa cá nhân", badgeType: "badge-structure", meaning: "= chủ nghĩa cá nhân" },
+            { word: "relationship", isCorrect: true, badgeText: "mối quan hệ", badgeType: "badge-correct", meaning: "= a more harmonious relationship (mối quan hệ hòa thuận, hài hòa hơn)" },
+            { word: "characteristic", isCorrect: false, badgeText: "đặc điểm", badgeType: "badge-structure", meaning: "= nét đặc trưng" },
+            { word: "disagreement", isCorrect: false, badgeText: "bất đồng", badgeType: "badge-wrong", meaning: "= sự bất đồng (mâu thuẫn với tính từ harmonious)" }
+          ],
+          whyCorrect: { ruleTitle: "Sự kết hợp từ với tính từ Harmonious", detail: "Tính từ 'harmonious' (hài hòa, hòa thuận) bổ nghĩa chuẩn xác nhất cho danh từ <span class='exp-highlight-green'>relationship</span> (mối quan hệ giữa các thế hệ)." },
+          whyWrong: [
+            { word: "A, C, D", reason: "không hợp nghĩa với mục đích thu hẹp khoảng cách thế hệ." }
+          ]
+        }
+      },
+
+      // SẮP XẾP ĐOẠN VĂN, LÁ THƯ, HỘI THOẠI (Câu 13 - 15)
+      {
+        id: 13,
+        exTitle: "PRACTICE TEST 2 - Rearrange the following sentences to make a meaningful paragraph/letter.",
+        question: "Question 13: Rearrange the sentences to make a meaningful paragraph:<br><b>a.</b> Moreover, staying hydrated by drinking plenty of water aids in digestion and nutrient absorption.<br><b>b.</b> To begin with, a balanced diet rich in fruits, vegetables, and whole grains provides essential nutrients and energy.<br><b>c.</b> Adopting these habits can lead to a healthier, more vibrant life.<br><b>d.</b> Regular physical activity strengthens the heart, muscles, and bones, while also improving mood and mental clarity.<br><b>e.</b> Living a healthy life involves several key practices that promote overall well-being.",
+        options: [
+          { key: "A", text: "e - b - d - a - c", raw: "e - b - d - a - c" },
+          { key: "B", text: "a - b - c - e - d", raw: "a - b - c - e - d" },
+          { key: "C", text: "e - b - d - c - d", raw: "e - b - d - c - d" },
+          { key: "D", text: "a - c - d - e - b", raw: "a - c - d - e - b" }
+        ],
+        correct: "A",
+        explanation: {
+          translation: "Sắp xếp đoạn văn:<br><b>e.</b> Sống một cuộc sống lành mạnh bao gồm một số thói quen cốt lõi giúp thúc đẩy sức khỏe toàn diện.<br><b>b.</b> Đầu tiên, chế độ ăn cân bằng giàu trái cây, rau củ và ngũ cốc cung cấp dưỡng chất và năng lượng thiết yếu.<br><b>d.</b> Hoạt động thể chất thường xuyên giúp củng cố tim mạch, cơ bắp và xương khớp...<br><b>a.</b> Hơn thế nữa, giữ cơ thể đủ nước bằng cách uống nhiều nước hỗ trợ tiêu hóa...<br><b>c.</b> Áp dụng những thói quen này có thể mang lại một cuộc sống khỏe mạnh và tràn đầy sức sống hơn.",
+          cards: [
+            { word: "e-b-d-a-c", isCorrect: true, badgeText: "chuẩn mạch văn 100%", badgeType: "badge-correct", meaning: "= Câu chủ đề (e) -> To begin with (b) -> Ý tiếp theo (d) -> Moreover (a) -> Câu kết (c)" },
+            { word: "a-b-c-e-d", isCorrect: false, badgeText: "sai mở đầu", badgeType: "badge-wrong", meaning: "= không mở đầu bằng 'Moreover'" },
+            { word: "e-b-d-c-d", isCorrect: false, badgeText: "lặp chữ d", badgeType: "badge-wrong", meaning: "= thiếu câu a và lặp câu d" },
+            { word: "a-c-d-e-b", isCorrect: false, badgeText: "sai mở đầu", badgeType: "badge-wrong", meaning: "= mở đầu bằng Moreover là sai" }
+          ],
+          whyCorrect: { ruleTitle: "Mạch phát triển đoạn văn nghị luận", detail: "Mở đoạn bằng câu chủ đề khái quát (e) → Ý thứ nhất bắt đầu bằng <span class='exp-highlight-green'>To begin with (b)</span> → Ý thứ hai về tập thể dục (d) → Ý bổ sung bằng liên từ <span class='exp-highlight-green'>Moreover (a)</span> → Câu kết tổng kết 'Adopting these habits...' (c): <span class='exp-highlight-green'>e - b - d - a - c</span>." },
+          whyWrong: [
+            { word: "B, D", reason: "đặt 'Moreover' ở đầu đoạn văn là sai." },
+            { word: "C", reason: "lỗi đánh máy trong phương án nhiễu (lặp chữ d, thiếu a)." }
+          ]
+        }
+      },
+      {
+        id: 14,
+        exTitle: "PRACTICE TEST 2 - Rearrange the following sentences to make a meaningful paragraph/letter.",
+        question: "Question 14: Rearrange the sentences to make a meaningful letter:<br>Dear Dad,<br><b>a.</b> I respect your desire for me to have a secure job, and I hope this data helps narrow our generation gap by showing that creative work can be both meaningful and sustainable.<br><b>b.</b> I know you prefer traditional career paths, but I see graphic design as a viable foundation for a modern future.<br><b>c.</b> These jobs not only offer economic stability but also support remote work, well-being, and use of digital skills—traits highly valued in our generation.<br><b>d.</b> Today, I realize that the creative industries—fields like graphic design, digital media, and UX—are booming.<br><b>e.</b> In the UK alone, they contributed about £125 billion and employed over 2.4 million people as of 2024.<br>Love, Win",
+        options: [
+          { key: "A", text: "b - c - d - e - a", raw: "b - c - d - e - a" },
+          { key: "B", text: "d - e - c - b - a", raw: "d - e - c - b - a" },
+          { key: "C", text: "c - d - a - e - b", raw: "c - d - a - e - b" },
+          { key: "D", text: "d - a - b - c - e", raw: "d - a - b - c - e" }
+        ],
+        correct: "B",
+        explanation: {
+          translation: "Sắp xếp lá thư gửi bố:<br>Bố kính mến,<br><b>d.</b> Hôm nay con nhận ra rằng các ngành công nghiệp sáng tạo—như thiết kế đồ họa, truyền thông số và UX—đang bùng nổ.<br><b>e.</b> Chỉ tính riêng tại Anh, chúng đã đóng góp khoảng 125 tỷ bảng và tạo việc làm cho hơn 2,4 triệu người tính đến năm 2024.<br><b>c.</b> Những công việc này không chỉ mang lại sự ổn định kinh tế mà còn hỗ trợ làm việc từ xa...<br><b>b.</b> Con biết bố thích những con đường sự nghiệp truyền thống hơn, nhưng con thấy thiết kế đồ họa là một nền tảng khả thi cho tương lai hiện đại.<br><b>a.</b> Con tôn trọng mong muốn của bố là con có một công việc ổn định, và con hy vọng số liệu này giúp thu hẹp khoảng cách thế hệ giữa bố con mình...<br>Yêu bố, Win",
+          cards: [
+            { word: "b-c-d-e-a", isCorrect: false, badgeText: "sai quy chiếu", badgeType: "badge-wrong", meaning: "= câu b chỉ nói 'graphic design' số ít, câu c lại dùng 'These jobs' số nhiều" },
+            { word: "d-e-c-b-a", isCorrect: true, badgeText: "chuẩn logic 100%", badgeType: "badge-correct", meaning: "= Nêu sự bùng nổ ngành sáng tạo (d) -> Dẫn chứng số liệu ở Anh (e) -> Lợi ích 'These jobs' (c) -> Bày tỏ nguyện vọng cá nhân (b) -> Câu kết thư (a)" },
+            { word: "c-d-a-e-b", isCorrect: false, badgeText: "sai mở đầu", badgeType: "badge-wrong", meaning: "= mở đầu bằng 'These jobs' khi chưa nhắc tới nghề nào" },
+            { word: "d-a-b-c-e", isCorrect: false, badgeText: "sai vị trí số liệu", badgeType: "badge-wrong", meaning: "= câu a nói 'this data' nhưng câu e chứa số liệu lại nằm ở cuối" }
+          ],
+          whyCorrect: { ruleTitle: "Sự liên kết đại từ quy chiếu (Reference Cohesion)", detail: "Câu (d) giới thiệu 'the creative industries' → Câu (e) dùng đại từ 'they' để nêu số liệu thống kê (125 tỷ bảng, 2.4 triệu người) → Câu (c) tiếp nối bằng 'These jobs' → Câu (b) liên hệ bản thân chọn ngành graphic design → Câu (a) kết thư nhắc lại 'hope this data helps narrow our generation gap': <span class='exp-highlight-green'>d - e - c - b - a</span>." },
+          whyWrong: [
+            { word: "A, C, D", reason: "làm đứt gãy mạch quy chiếu của 'they', 'These jobs' và 'this data'." }
+          ]
+        }
+      },
+      {
+        id: 15,
+        exTitle: "PRACTICE TEST 2 - Rearrange the following sentences to make a meaningful conversation.",
+        question: "Question 15: Rearrange the sentences to make a meaningful conversation:<br><b>a. Father:</b> I just want to give you advice. From my traditional view, music isn't a stable career.<br><b>b. Father:</b> I understand, but think carefully. Life is not just about passion — it's also about responsibility.<br><b>c. Son:</b> Why do we always argue about my future job? I want to follow my dream of becoming a musician.<br><b>d. Son:</b> But I don't want to follow a path that doesn't suit me. I need freedom to decide.",
+        options: [
+          { key: "A", text: "d - a - c - b", raw: "d - a - c - b" },
+          { key: "B", text: "c - a - d - b", raw: "c - a - d - b" },
+          { key: "C", text: "d - b - a - c", raw: "d - b - a - c" },
+          { key: "D", text: "c - d - a - b", raw: "c - d - a - b" }
+        ],
+        correct: "B",
+        explanation: {
+          translation: "Sắp xếp cuộc trò chuyện giữa hai bố con:<br><b>c. Con trai:</b> Tại sao bố con mình cứ luôn tranh cãi về công việc tương lai của con thế ạ? Con muốn theo đuổi ước mơ trở thành nhạc sĩ.<br><b>a. Bố:</b> Bố chỉ muốn khuyên con thôi. Theo quan điểm truyền thống của bố, âm nhạc không phải là một sự nghiệp ổn định.<br><b>d. Con trai:</b> Nhưng con không muốn đi theo con đường không phù hợp với mình. Con cần sự tự do quyết định.<br><b>b. Bố:</b> Bố hiểu, nhưng hãy suy nghĩ thật kỹ. Cuộc sống không chỉ có đam mê — mà còn là trách nhiệm nữa.",
+          cards: [
+            { word: "d-a-c-b", isCorrect: false, badgeText: "sai mở đầu", badgeType: "badge-wrong", meaning: "= không mở đầu cuộc hội thoại bằng 'But...'" },
+            { word: "c-a-d-b", isCorrect: true, badgeText: "chuẩn đối thoại", badgeType: "badge-correct", meaning: "= Con nêu vấn đề âm nhạc (c) -> Bố giải thích (a) -> Con phản biện (d) -> Bố khuyên nhủ (b)" },
+            { word: "d-b-a-c", isCorrect: false, badgeText: "sai mở đầu", badgeType: "badge-wrong", meaning: "= mở đầu bằng 'But' là thiếu tiền đề" },
+            { word: "c-d-a-b", isCorrect: false, badgeText: "lệch lượt lời", badgeType: "badge-wrong", meaning: "= con trai nói liền 2 câu không có lời đáp của bố ở giữa" }
+          ],
+          whyCorrect: { ruleTitle: "Sự luân phiên lượt lời trong đối thoại", detail: "Người con đặt câu hỏi mở đầu và nêu ước mơ làm nhạc sĩ (c) → Người bố đáp lại về nghề âm nhạc 'music isn't a stable career' (a) → Người con phản bác 'But I don't want...' (d) → Người bố nhẹ nhàng khuyên bảo 'I understand, but think carefully...' (b): <span class='exp-highlight-green'>c - a - d - b</span>." },
+          whyWrong: [
+            { word: "A, C, D", reason: "sai trật tự luân phiên hỏi - đáp giữa hai bố con." }
+          ]
+        }
+      },
+
+      // BÀI 3: ĐỌC ĐIỀN KHUYẾT MỆNH ĐỀ - A MOTHER'S JOURNEY (Câu 16 - 20)
+      {
+        id: 16,
+        exTitle: "PRACTICE TEST 2 - Read the following passage and choose the option that best fits each of the numbered blanks.",
+        question: "<div class='passage-box'><div class='passage-title'>👩‍👧‍👦 A Mother's Journey 👩‍👧‍👦</div>The generation gap, which many experts see as a big challenge in modern families, has become even wider with the rise of digital technology. Mrs. Lan, a mother whose teenagers often used their smartphones a lot, (16) ________.<br>After going to a workshop, Mrs. Lan understood that the teenagers she worried about belonged to a generation whose way of communicating is very different from their parents'. The workshop, which was planned by experts in child psychology, (17) ________.<br>Encouraged by this idea, Mrs. Lan started to watch her children's activities more carefully. She spent time watching videos her daughter shared, many of which were made to celebrate friendships and special moments. Her son, (18) ________.<br>Knowing how important these activities were, (19) ________. By closing the gap, she built trust, which is very important in relationships that face challenges because of generation differences.<br>Although they still sometimes disagreed, Mrs. Lan's patience and effort to understand her children made a big difference. (20) ________.</div>Question 16: Mrs. Lan, a mother whose teenagers often used their smartphones a lot, (16) ________.",
+        options: [
+          { key: "A", text: "initially there were questions about why they used technology so much in their daily lives", raw: "initially there were questions about why they used technology so much in their daily lives" },
+          { key: "B", text: "used to accept their behavior without asking questions or learning what they were doing", raw: "used to accept their behavior without asking questions or learning what they were doing" },
+          { key: "C", text: "frequently urge them to focus on studying instead of sharing her concerns about screen time", raw: "frequently urge them to focus on studying instead of sharing her concerns about screen time" },
+          { key: "D", text: "at first thought their habits were unhealthy and ignored the benefits of online communication", raw: "at first thought their habits were unhealthy and ignored the benefits of online communication" }
+        ],
+        correct: "D",
+        explanation: {
+          translation: "Cô Lan, một người mẹ có các con tuổi thiếu niên thường xuyên sử dụng điện thoại thông minh rất nhiều, ban đầu đã nghĩ rằng thói quen của các con là không lành mạnh và phớt lờ những lợi ích của việc giao tiếp trực tuyến.",
+          cards: [
+            { word: "Câu A", isCorrect: false, badgeText: "thiếu vị ngữ", badgeType: "badge-wrong", meaning: "= chủ ngữ 'Mrs. Lan' bị bỏ lơ, tự nhiên nhảy sang 'there were'" },
+            { word: "Câu B", isCorrect: false, badgeText: "sai nội dung", badgeType: "badge-wrong", meaning: "= chấp nhận mà không thắc mắc (mâu thuẫn với việc bà lo lắng 'she worried about' ở câu sau)" },
+            { word: "Câu C", isCorrect: false, badgeText: "sai thì & chia V", badgeType: "badge-wrong", meaning: "= Mrs. Lan số ít và mạch chuyện kể ở quá khứ mà dùng 'urge' nguyên mẫu là sai" },
+            { word: "Câu D", isCorrect: true, badgeText: "chuẩn ngữ pháp & ý", badgeType: "badge-correct", meaning: "= đóng vai trò vị ngữ chia thì quá khứ đơn 'thought... and ignored...' cho chủ ngữ Mrs. Lan" }
+          ],
+          whyCorrect: { ruleTitle: "Cấu trúc Chủ ngữ - Vị ngữ & Sự thống nhất về thì", detail: "Câu văn đã có chủ ngữ <span class='exp-highlight-green'>'Mrs. Lan'</span> và mệnh đề quan hệ phụ giải thích ở giữa. Chỗ trống cần một cụm động từ làm vị ngữ chia ở thì quá khứ đơn và hợp với mạch lo lắng của người mẹ ban đầu → <span class='exp-highlight-green'>at first thought their habits were unhealthy and ignored...</span>" },
+          whyWrong: [
+            { word: "A", reason: "lỗi câu cụt (chủ ngữ Mrs. Lan chưa có động từ chính)." },
+            { word: "B", reason: "mâu thuẫn với chi tiết bà lo lắng và đi dự hội thảo ở đoạn 2." },
+            { word: "C", reason: "động từ 'urge' không chia thì quá khứ đơn hay thêm -s." }
+          ]
+        }
+      },
+      {
+        id: 17,
+        exTitle: "PRACTICE TEST 2 - Read the following passage and choose the option that best fits each of the numbered blanks.",
+        question: "Question 17: The workshop, which was planned by experts in child psychology, (17) ________.",
+        options: [
+          { key: "A", text: "presenting social media mainly as a useful way to strengthen friendships and share feelings", raw: "presenting social media mainly as a useful way to strengthen friendships and share feelings" },
+          { key: "B", text: "showed how social media could be a useful tool for expressing feelings and connecting with others", raw: "showed how social media could be a useful tool for expressing feelings and connecting with others" },
+          { key: "C", text: "which explains why teenagers use social media mainly for entertainment rather than social connection", raw: "which explains why teenagers use social media mainly for entertainment rather than social connection" },
+          { key: "D", text: "emphasized how social media helping young people learn new skills and stay informed", raw: "emphasized how social media helping young people learn new skills and stay informed" }
+        ],
+        correct: "B",
+        explanation: {
+          translation: "Buổi hội thảo, được lên kế hoạch bởi các chuyên gia tâm lý trẻ em, đã chỉ ra cách mạng xã hội có thể trở thành một công cụ hữu ích để bày tỏ cảm xúc và kết nối với mọi người.",
+          cards: [
+            { word: "Câu A", isCorrect: false, badgeText: "thiếu V chính", badgeType: "badge-wrong", meaning: "= dùng V-ing 'presenting' làm câu thiếu động từ chia thì" },
+            { word: "Câu B", isCorrect: true, badgeText: "chuẩn vị ngữ", badgeType: "badge-correct", meaning: "= động từ chính 'showed' chia quá khứ đơn + mệnh đề danh ngữ 'how social media could be...'" },
+            { word: "Câu C", isCorrect: false, badgeText: "thừa which & sai ý", badgeType: "badge-wrong", meaning: "= dùng 'which' làm chủ ngữ 'The workshop' bị mất vị ngữ" },
+            { word: "Câu D", isCorrect: false, badgeText: "sai mệnh đề how", badgeType: "badge-wrong", meaning: "= 'how social media helping' thiếu động từ chia thì sau chủ ngữ social media" }
+          ],
+          whyCorrect: { ruleTitle: "Động từ chính của câu sau mệnh đề quan hệ không xác định", detail: "Chủ ngữ chính là <span class='exp-highlight-green'>'The workshop'</span>, phần giữa 2 dấu phẩy là mệnh đề phụ. Chỗ trống cần động từ chính chia ở quá khứ đơn: <span class='exp-highlight-green'>showed how social media could be a useful tool...</span>" },
+          whyWrong: [
+            { word: "A, C", reason: "không có động từ chính chia thì cho chủ ngữ The workshop." },
+            { word: "D", reason: "mệnh đề 'how + S + V' bị sai vì dùng 'helping' thay vì động từ chia thì." }
+          ]
+        }
+      },
+      {
+        id: 18,
+        exTitle: "PRACTICE TEST 2 - Read the following passage and choose the option that best fits each of the numbered blanks.",
+        question: "Question 18: Her son, (18) ________.",
+        options: [
+          { key: "A", text: "being someone who enjoyed online gaming, shared with her how such games provided a way to relieve pressure after classes", raw: "being someone who enjoyed online gaming, shared with her how such games provided a way to relieve pressure after classes" },
+          { key: "B", text: "whom spent a lot of time on online games, explaining that these activities helped him to unwind after stressful school days", raw: "whom spent a lot of time on online games, explaining that these activities helped him to unwind after stressful school days" },
+          { key: "C", text: "that online gaming was his favorite pastime and said it helped him relax whenever school was tough", raw: "that online gaming was his favorite pastime and said it helped him relax whenever school was tough" },
+          { key: "D", text: "told her how these games helped him relax after a long day at school, whose hobby was often playing online games", raw: "told her how these games helped him relax after a long day at school, whose hobby was often playing online games" }
+        ],
+        correct: "A",
+        explanation: {
+          translation: "Con trai của cô, vốn là một người thích chơi trò chơi trực tuyến, đã chia sẻ với mẹ cách những trò chơi đó giúp giải tỏa áp lực sau giờ học như thế nào.",
+          cards: [
+            { word: "Câu A", isCorrect: true, badgeText: "chuẩn ngữ pháp", badgeType: "badge-correct", meaning: "= cụm phân từ giải thích 'being someone...' + động từ chính 'shared with her...'" },
+            { word: "Câu B", isCorrect: false, badgeText: "sai whom & thiếu V", badgeType: "badge-wrong", meaning: "= dùng 'whom' làm chủ ngữ cho 'spent' là sai, và 'explaining' không phải động từ chính" },
+            { word: "Câu C", isCorrect: false, badgeText: "sai 'that' sau dấu phẩy", badgeType: "badge-wrong", meaning: "= đại từ 'that' không đứng sau dấu phẩy" },
+            { word: "Câu D", isCorrect: false, badgeText: "sai vị trí whose", badgeType: "badge-wrong", meaning: "= đặt mệnh đề 'whose hobby...' sau danh từ 'school' là hoàn toàn sai quy chiếu" }
+          ],
+          whyCorrect: { ruleTitle: "Cụm phân từ đồng vị ngữ & Động từ chính", detail: "Chủ ngữ <span class='exp-highlight-green'>'Her son'</span> theo sau bởi dấu phẩy → Cụm phân từ <span class='exp-highlight-green'>being someone who enjoyed online gaming</span> đóng vai trò bổ nghĩa, sau dấu phẩy thứ hai là động từ chính chia quá khứ đơn <span class='exp-highlight-green'>shared with her...</span>" },
+          whyWrong: [
+            { word: "B", reason: "sai đại từ quan hệ 'whom' và câu thiếu động từ chính." },
+            { word: "C", reason: "không dùng 'that' sau dấu phẩy." },
+            { word: "D", reason: "mệnh đề quan hệ 'whose hobby...' bị đặt quá xa chủ ngữ 'Her son'." }
+          ]
+        }
+      },
+      {
+        id: 19,
+        exTitle: "PRACTICE TEST 2 - Read the following passage and choose the option that best fits each of the numbered blanks.",
+        question: "Question 19: Knowing how important these activities were, (19) ________.",
+        options: [
+          { key: "A", text: "Mrs. Lan was more open and honest before her efforts to understand the conversation", raw: "Mrs. Lan was more open and honest before her efforts to understand the conversation" },
+          { key: "B", text: "efforts to understand her children have encouraged more open communication", raw: "efforts to understand her children have encouraged more open communication" },
+          { key: "C", text: "Mrs. Lan's children tried to have more open conversations before she understood them", raw: "Mrs. Lan's children tried to have more open conversations before she understood them" },
+          { key: "D", text: "Mrs. Lan encouraged open talks, something that rarely happened before she tried", raw: "Mrs. Lan encouraged open talks, something that rarely happened before she tried" }
+        ],
+        correct: "D",
+        explanation: {
+          translation: "Hiểu được những hoạt động này quan trọng như thế nào, cô Lan đã khuyến khích những cuộc trò chuyện cởi mở, một điều hiếm khi xảy ra trước khi cô nỗ lực tìm hiểu.",
+          cards: [
+            { word: "Câu A", isCorrect: false, badgeText: "sai nghĩa 'before'", badgeType: "badge-wrong", meaning: "= cởi mở TRƯỚC KHI nỗ lực tìm hiểu là ngược hoàn toàn mạch truyện" },
+            { word: "Câu B", isCorrect: false, badgeText: "lỗi Dangling Participle", badgeType: "badge-wrong", meaning: "= chủ ngữ 'efforts' không thể thực hiện hành động 'Knowing' ở vế đầu" },
+            { word: "Câu C", isCorrect: false, badgeText: "sai chủ ngữ đồng vị", badgeType: "badge-wrong", meaning: "= người 'Knowing...' và người 'built trust' ở câu sau là Mrs. Lan chứ không phải các con" },
+            { word: "Câu D", isCorrect: true, badgeText: "đồng chủ ngữ chuẩn", badgeType: "badge-correct", meaning: "= Chủ ngữ 'Mrs. Lan' khớp với phân từ 'Knowing...' và hợp nghĩa toàn đoạn" }
+          ],
+          whyCorrect: { ruleTitle: "Rút gọn mệnh đề cùng chủ ngữ (Participle Clause)", detail: "Vế đầu rút gọn bằng V-ing: <span class='exp-highlight-green'>'Knowing how important these activities were,'</span> → Chủ ngữ của mệnh đề chính ngay sau dấu phẩy bắt buộc phải là người thực hiện hành động 'Knowing' đó, chính là <span class='exp-highlight-green'>Mrs. Lan</span>. Câu D vừa đúng chủ ngữ vừa hợp logic thời gian ('rarely happened before she tried')." },
+          whyWrong: [
+            { word: "A", reason: "sai nghĩa vì dùng 'before'." },
+            { word: "B", reason: "lỗi ngữ pháp rút gọn khác chủ ngữ ('efforts' không biết suy nghĩ 'Knowing')." },
+            { word: "C", reason: "sai cả chủ ngữ lẫn nghĩa 'before'." }
+          ]
+        }
+      },
+      {
+        id: 20,
+        exTitle: "PRACTICE TEST 2 - Read the following passage and choose the option that best fits each of the numbered blanks.",
+        question: "Question 20: Although they still sometimes disagreed, Mrs. Lan's patience and effort to understand her children made a big difference. (20) ________.",
+        options: [
+          { key: "A", text: "The generation gap, once seen as too hard to fix, can become smaller with empathy and communication — qualities that are very important in any family trying to adjust to a fast-changing world", raw: "The generation gap, once seen as too hard to fix, can become smaller with empathy and communication — qualities that are very important in any family trying to adjust to a fast-changing world" },
+          { key: "B", text: "Such efforts demonstrate that although disagreements still exist, understanding and open communication help families bridge the gap completely and try to adapt to a rapidly changing world", raw: "Such efforts demonstrate that although disagreements still exist, understanding and open communication help families bridge the gap completely and try to adapt to a rapidly changing world" },
+          { key: "C", text: "Generational differences have been significantly improved by important actions in imposing and guiding important directions that make families harmonious", raw: "Generational differences have been significantly improved by important actions in imposing and guiding important directions that make families harmonious" },
+          { key: "D", text: "The connection between generations, although sometimes conflicting, empathy and honest dialogue help increase misunderstandings between parents and children", raw: "The connection between generations, although sometimes conflicting, empathy and honest dialogue help increase misunderstandings between parents and children" }
+        ],
+        correct: "A",
+        explanation: {
+          translation: "Khoảng cách thế hệ, từng được xem là quá khó để hàn gắn, có thể được thu hẹp lại nhờ sự thấu cảm và giao tiếp — những phẩm chất vô cùng quan trọng trong bất kỳ gia đình nào đang cố gắng thích nghi với một thế giới thay đổi nhanh chóng.",
+          cards: [
+            { word: "Câu A", isCorrect: true, badgeText: "kết bài chuẩn mực", badgeType: "badge-correct", meaning: "= đúc kết thông điệp sâu sắc, chuẩn ngữ pháp và tự nhiên" },
+            { word: "Câu B", isCorrect: false, badgeText: "lặp ý & quá tuyệt đối", badgeType: "badge-wrong", meaning: "= lặp lại y nguyên 'although disagreements...' của câu trước và dùng 'completely' (hoàn toàn)" },
+            { word: "Câu C", isCorrect: false, badgeText: "sai từ 'imposing'", badgeType: "badge-wrong", meaning: "= 'imposing' nghĩa là áp đặt (áp đặt thì không thể giúp gia đình hòa hợp)" },
+            { word: "Câu D", isCorrect: false, badgeText: "ngược nghĩa", badgeType: "badge-wrong", meaning: "= 'increase misunderstandings' (làm tăng thêm sự hiểu lầm - sai hoàn toàn)" }
+          ],
+          whyCorrect: { ruleTitle: "Câu kết luận khái quát thông điệp toàn bài", detail: "Câu cuối cùng đúc kết bài học từ câu chuyện của cô Lan: Khoảng cách thế hệ có thể thu hẹp lại (<span class='exp-highlight-green'>become smaller</span>) bằng sự thấu cảm và giao tiếp (<span class='exp-highlight-green'>with empathy and communication</span>)." },
+          whyWrong: [
+            { word: "B", reason: "lặp lại cấu trúc câu đứng ngay trước nó và từ 'bridge the gap completely' mâu thuẫn với việc 'still sometimes disagreed'." },
+            { word: "C", reason: "dùng từ 'imposing' (áp đặt) trái với tinh thần lắng nghe của bài." },
+            { word: "D", reason: "sai ngữ pháp câu và ngược nghĩa 'increase misunderstandings'." }
+          ]
+        }
+      },
+
+      // BÀI 4: ĐỌC HIỂU VỀ CHẾ ĐỘ ĂN PALEO DIET (Câu 21 - 28)
+      {
+        id: 21,
+        exTitle: "PRACTICE TEST 2 - Read the following passage and mark the letter A, B, C, or D on your answer sheet to indicate the best answer to each of the following questions from 21 to 28.",
+        question: "<div class='passage-box'><div class='passage-title'>🥩 The Paleo Diet & Ancestral Eating 🥦</div>Modern supermarkets give us many food choices. There are colorful fruits and vegetables, fresh fish and meat, and many kinds of bread, eggs, yogurt, and cheese. But at the same time, people in the modern world are experiencing health problems. Could the food we eat be causing some of <u>them</u>?<br><br>One explanation for modern health problems is that they began when human beings became farmers about 12,000 years ago. Around that time, people started growing and eating crops, such as wheat and rice. <u>Some people believe that returning to an earlier way of eating might be a solution to our modern health problems.</u> One of the good examples is a “paleo diet” that includes only meat, fish, and fruits and vegetables.<br><br>A paleo diet is special because it doesn't include grains, dairy foods, or legumes, such as peanuts or beans. People who follow a paleo diet only eat foods people ate before farming began and believe this is a more <u>natural</u> and healthier way to eat. For many of us, it is not possible to prepare our favorite dishes without these ingredients.<br><br>For Dr. Peter Ungar, the truth is not so simple. In human history, people have eaten a wide variety of foods. Early human beings lived in different places with different climates, so many kinds of food were <u>available</u> to our ancestors even before farming began. Dr. Ungar says our ability to eat in many different ways and to be healthy, whether we live in the Arctic or in the tropics, is the important thing. One thing is certain, though: If you do decide to try a paleo diet, remember that your meals might actually have less variety than the meals of your early ancestors.</div>Question 21. Which of the following is NOT mentioned in paragraph 1 as one of the food choices that modern supermarkets offer?",
+        options: [
+          { key: "A", text: "grains", raw: "grains" },
+          { key: "B", text: "vegetables", raw: "vegetables" },
+          { key: "C", text: "colorful fruits", raw: "colorful fruits" },
+          { key: "D", text: "fresh fish", raw: "fresh fish" }
+        ],
+        correct: "A",
+        explanation: {
+          translation: "Thực phẩm nào sau đây KHÔNG được đề cập trong đoạn 1 như là một trong những lựa chọn thực phẩm mà các siêu thị hiện đại cung cấp?",
+          cards: [
+            { word: "grains", isCorrect: true, badgeText: "không nêu ở đoạn 1", badgeType: "badge-correct", meaning: "= ngũ cốc (chỉ xuất hiện ở đoạn 3, không có trong đoạn 1)" },
+            { word: "vegetables", isCorrect: false, badgeText: "có ở đoạn 1", badgeType: "badge-structure", meaning: "= rau củ (dòng 1 đoạn 1)" },
+            { word: "colorful fruits", isCorrect: false, badgeText: "có ở đoạn 1", badgeType: "badge-structure", meaning: "= trái cây nhiều màu sắc (dòng 1 đoạn 1)" },
+            { word: "fresh fish", isCorrect: false, badgeText: "có ở đoạn 1", badgeType: "badge-structure", meaning: "= cá tươi (dòng 1 đoạn 1)" }
+          ],
+          whyCorrect: { ruleTitle: "Kỹ năng đọc quét tìm chi tiết (Scanning)", detail: "Đoạn 1 liệt kê: 'There are colorful fruits and vegetables, fresh fish and meat, and many kinds of bread, eggs, yogurt, and cheese.' Từ <span class='exp-highlight-green'>grains</span> hoàn toàn không được nhắc tới trong đoạn 1." },
+          whyWrong: [
+            { word: "B, C, D", reason: "đều được nêu trực tiếp ngay câu thứ 2 của đoạn 1." }
+          ]
+        }
+      },
+      {
+        id: 22,
+        exTitle: "PRACTICE TEST 2 - Read the following passage and mark the letter A, B, C, or D on your answer sheet to indicate the best answer to each of the following questions from 21 to 28.",
+        question: "Question 22. The word “<u>them</u>” in paragraph 1 refers to ________.",
+        options: [
+          { key: "A", text: "supermarkets", raw: "supermarkets" },
+          { key: "B", text: "health problems", raw: "health problems" },
+          { key: "C", text: "people", raw: "people" },
+          { key: "D", text: "many kinds", raw: "many kinds" }
+        ],
+        correct: "B",
+        explanation: {
+          translation: "Từ “them” (chúng) ở đoạn 1 quy chiếu đến cụm từ “các vấn đề sức khỏe”.",
+          cards: [
+            { word: "supermarkets", isCorrect: false, badgeText: "sai quy chiếu", badgeType: "badge-wrong", meaning: "= các siêu thị" },
+            { word: "health problems", isCorrect: true, badgeText: "quy chiếu chuẩn", badgeType: "badge-correct", meaning: "= các vấn đề sức khỏe (causing some of health problems)" },
+            { word: "people", isCorrect: false, badgeText: "sai nghĩa", badgeType: "badge-wrong", meaning: "= con người (thức ăn không 'gây ra' con người)" },
+            { word: "many kinds", isCorrect: false, badgeText: "sai nghĩa", badgeType: "badge-wrong", meaning: "= nhiều loại" }
+          ],
+          whyCorrect: { ruleTitle: "Kỹ năng xác định đại từ quy chiếu", detail: "Đọc câu trước: '...people in the modern world are experiencing <span class='exp-highlight-green'>health problems</span>. Could the food we eat be causing some of <span class='exp-highlight-green'>them</span>?' (Liệu thức ăn chúng ta ăn có phải đang gây ra một số vấn đề sức khỏe đó không?)." },
+          whyWrong: [
+            { word: "A, C, D", reason: "lắp vào sau động từ 'causing' (gây ra) đều vô nghĩa." }
+          ]
+        }
+      },
+      {
+        id: 23,
+        exTitle: "PRACTICE TEST 2 - Read the following passage and mark the letter A, B, C, or D on your answer sheet to indicate the best answer to each of the following questions from 21 to 28.",
+        question: "Question 23. Which of the following best paraphrases the underlined sentence in paragraph 2?<br><u>Some people believe that returning to an earlier way of eating might be a solution to our modern health problems.</u>",
+        options: [
+          { key: "A", text: "Some people think that eating the way people ate long ago may help fix today's health issues.", raw: "Some people think that eating the way people ate long ago may help fix today's health issues." },
+          { key: "B", text: "Several individuals think eating food from long ago won't help improve today's health problems.", raw: "Several individuals think eating food from long ago won't help improve today's health problems." },
+          { key: "C", text: "Many say modern health issues are too serious to solve with old-fashioned eating habits.", raw: "Many say modern health issues are too serious to solve with old-fashioned eating habits." },
+          { key: "D", text: "Some believe changing modern diets is better than copying how people used to eat in the past.", raw: "Some believe changing modern diets is better than copying how people used to eat in the past." }
+        ],
+        correct: "A",
+        explanation: {
+          translation: "Câu gốc: Một số người tin rằng việc quay trở lại cách ăn uống thời xưa có thể là một giải pháp cho các vấn đề sức khỏe hiện đại của chúng ta.<br>→ Câu đồng nghĩa (A): Một số người nghĩ rằng việc ăn uống theo cách con người đã ăn từ xa xưa có thể giúp giải quyết các vấn đề sức khỏe ngày nay.",
+          cards: [
+            { word: "Câu A", isCorrect: true, badgeText: "paraphrase chuẩn 100%", badgeType: "badge-correct", meaning: "= believe = think; earlier way of eating = the way people ate long ago; solution = help fix; modern health problems = today's health issues" },
+            { word: "Câu B", isCorrect: false, badgeText: "ngược nghĩa 'won't'", badgeType: "badge-wrong", meaning: "= nói rằng sẽ KHÔNG giúp cải thiện (trái với câu gốc)" },
+            { word: "Câu C", isCorrect: false, badgeText: "sai ý 'too serious'", badgeType: "badge-wrong", meaning: "= quá nghiêm trọng không thể giải quyết" },
+            { word: "Câu D", isCorrect: false, badgeText: "ngược ý", badgeType: "badge-wrong", meaning: "= phản đối việc bắt chước cách ăn ngày xưa" }
+          ],
+          whyCorrect: { ruleTitle: "Kỹ năng viết lại câu tương đương (Paraphrasing)", detail: "Câu A giữ nguyên trọn vẹn ý nghĩa gốc thông qua các cặp từ đồng nghĩa: <span class='exp-highlight-green'>returning to an earlier way of eating = eating the way people ate long ago</span>; <span class='exp-highlight-green'>might be a solution to = may help fix</span>; <span class='exp-highlight-green'>modern health problems = today's health issues</span>." },
+          whyWrong: [
+            { word: "B, C, D", reason: "đều làm biến đổi hoặc đảo ngược thông điệp của câu gốc." }
+          ]
+        }
+      },
+      {
+        id: 24,
+        exTitle: "PRACTICE TEST 2 - Read the following passage and mark the letter A, B, C, or D on your answer sheet to indicate the best answer to each of the following questions from 21 to 28.",
+        question: "Question 24. The word “<u>natural</u>” in paragraph 3 is OPPOSITE in meaning to ________.",
+        options: [
+          { key: "A", text: "normal", raw: "normal" },
+          { key: "B", text: "rare", raw: "rare" },
+          { key: "C", text: "common", raw: "common" },
+          { key: "D", text: "artificial", raw: "artificial" }
+        ],
+        correct: "D",
+        explanation: {
+          translation: "Từ “natural” (tự nhiên) ở đoạn 3 TRÁI NGHĨA với từ “artificial” (nhân tạo).",
+          cards: [
+            { word: "normal", isCorrect: false, badgeText: "bình thường", badgeType: "badge-structure", meaning: "= bình thường" },
+            { word: "rare", isCorrect: false, badgeText: "hiếm", badgeType: "badge-structure", meaning: "= hiếm gặp" },
+            { word: "common", isCorrect: false, badgeText: "phổ biến", badgeType: "badge-structure", meaning: "= phổ biến, thông thường" },
+            { word: "artificial", isCorrect: true, badgeText: "trái nghĩa chuẩn", badgeType: "badge-correct", meaning: "= nhân tạo, chế biến công nghiệp (<> natural tự nhiên)" }
+          ],
+          whyCorrect: { ruleTitle: "Cặp tính từ trái nghĩa Tự nhiên - Nhân tạo", detail: "<span class='exp-highlight-green'>natural</span> (thuộc về tự nhiên, thiên nhiên) trái nghĩa trực tiếp với <span class='exp-highlight-green'>artificial / man-made</span> (nhân tạo)." },
+          whyWrong: [
+            { word: "normal, rare, common", reason: "không đối lập về bản chất tự nhiên vs nhân tạo." }
+          ]
+        }
+      },
+      {
+        id: 25,
+        exTitle: "PRACTICE TEST 2 - Read the following passage and mark the letter A, B, C, or D on your answer sheet to indicate the best answer to each of the following questions from 21 to 28.",
+        question: "Question 25. The word “<u>available</u>” in paragraph 4 is CLOSEST in meaning to ________.",
+        options: [
+          { key: "A", text: "respectable", raw: "respectable" },
+          { key: "B", text: "occupied", raw: "occupied" },
+          { key: "C", text: "obtainable", raw: "obtainable" },
+          { key: "D", text: "predictable", raw: "predictable" }
+        ],
+        correct: "C",
+        explanation: {
+          translation: "Từ “available” (có sẵn, có thể kiếm được) ở đoạn 4 GẦN NGHĨA NHẤT với từ “obtainable”.",
+          cards: [
+            { word: "respectable", isCorrect: false, badgeText: "đáng kính", badgeType: "badge-structure", meaning: "= đáng kính trọng" },
+            { word: "occupied", isCorrect: false, badgeText: "bận / bị chiếm", badgeType: "badge-wrong", meaning: "= đang bận rộn / đã có người dùng" },
+            { word: "obtainable", isCorrect: true, badgeText: "đồng nghĩa chuẩn", badgeType: "badge-correct", meaning: "= có thể thu được, kiếm được, có sẵn (= available / accessible)" },
+            { word: "predictable", isCorrect: false, badgeText: "dự đoán được", badgeType: "badge-structure", meaning: "= có thể đoán trước" }
+          ],
+          whyCorrect: { ruleTitle: "Tìm từ đồng nghĩa trong ngữ cảnh", detail: "Trong câu 'many kinds of food were <span class='exp-highlight-green'>available</span> to our ancestors', từ available nghĩa là có sẵn để con người tìm kiếm và sử dụng → đồng nghĩa với <span class='exp-highlight-green'>obtainable</span> (có thể kiếm được/đạt được)." },
+          whyWrong: [
+            { word: "A, B, D", reason: "sai nghĩa hoàn toàn khi nói về nguồn thức ăn trong tự nhiên." }
+          ]
+        }
+      },
+      {
+        id: 26,
+        exTitle: "PRACTICE TEST 2 - Read the following passage and mark the letter A, B, C, or D on your answer sheet to indicate the best answer to each of the following questions from 21 to 28.",
+        question: "Question 26. Which of the following is TRUE according to the passage?",
+        options: [
+          { key: "A", text: "Early humans mostly ate one kind of food due to cold climates.", raw: "Early humans mostly ate one kind of food due to cold climates." },
+          { key: "B", text: "Paleo followers often use modern ingredients to cook old recipes.", raw: "Paleo followers often use modern ingredients to cook old recipes." },
+          { key: "C", text: "A paleo diet avoids grains, beans, and products made from milk.", raw: "A paleo diet avoids grains, beans, and products made from milk." },
+          { key: "D", text: "People today have more food choices than those in the past.", raw: "People today have more food choices than those in the past." }
+        ],
+        correct: "C",
+        explanation: {
+          translation: "Điều nào sau đây là ĐÚNG theo nội dung bài đọc?",
+          cards: [
+            { word: "ate one kind of food", isCorrect: false, badgeText: "sai với đoạn 4", badgeType: "badge-wrong", meaning: "= đoạn 4 nói tổ tiên ăn rất đa dạng 'a wide variety of foods'" },
+            { word: "use modern ingredients", isCorrect: false, badgeText: "sai với đoạn 3", badgeType: "badge-wrong", meaning: "= người ăn paleo chỉ ăn thực phẩm có trước thời kỳ trồng trọt" },
+            { word: "avoids grains, beans, milk", isCorrect: true, badgeText: "đúng 100% đoạn 3", badgeType: "badge-correct", meaning: "= chế độ paleo tránh ngũ cốc, đậu và các sản phẩm từ sữa (dairy foods)" },
+            { word: "more choices than past", isCorrect: false, badgeText: "sai với đoạn 4", badgeType: "badge-wrong", meaning: "= câu cuối bài nói bữa ăn paleo thậm chí còn ít đa dạng hơn bữa ăn của tổ tiên" }
+          ],
+          whyCorrect: { ruleTitle: "Đối chiếu thông tin xác thực trong bài", detail: "Đầu đoạn 3 khẳng định: <span class='exp-highlight-green'>'A paleo diet is special because it doesn't include grains, dairy foods, or legumes, such as peanuts or beans.'</span> Trong đó 'dairy foods' chính là 'products made from milk' (sản phẩm làm từ sữa)." },
+          whyWrong: [
+            { word: "A, B, D", reason: "mâu thuẫn trực tiếp với thông tin trong đoạn 3 và đoạn 4." }
+          ]
+        }
+      },
+      {
+        id: 27,
+        exTitle: "PRACTICE TEST 2 - Read the following passage and mark the letter A, B, C, or D on your answer sheet to indicate the best answer to each of the following questions from 21 to 28.",
+        question: "Question 27. In which paragraph does the author list ingredients that a paleo diet excludes?",
+        options: [
+          { key: "A", text: "paragraph 1", raw: "paragraph 1" },
+          { key: "B", text: "paragraph 2", raw: "paragraph 2" },
+          { key: "C", text: "paragraph 3", raw: "paragraph 3" },
+          { key: "D", text: "paragraph 4", raw: "paragraph 4" }
+        ],
+        correct: "C",
+        explanation: {
+          translation: "Ở đoạn văn nào tác giả liệt kê những nguyên liệu thực phẩm mà chế độ ăn paleo loại trừ (không ăn)?",
+          cards: [
+            { word: "paragraph 1", isCorrect: false, badgeText: "siêu thị hiện đại", badgeType: "badge-structure", meaning: "= giới thiệu thực phẩm siêu thị và vấn đề sức khỏe" },
+            { word: "paragraph 2", isCorrect: false, badgeText: "thực phẩm bao gồm", badgeType: "badge-wrong", meaning: "= chỉ nêu những thứ paleo BAO GỒM (includes meat, fish, fruits, vegetables)" },
+            { word: "paragraph 3", isCorrect: true, badgeText: "thực phẩm loại trừ", badgeType: "badge-correct", meaning: "= nêu rõ 'doesn't include grains, dairy foods, or legumes, such as peanuts or beans'" },
+            { word: "paragraph 4", isCorrect: false, badgeText: "góc nhìn khoa học", badgeType: "badge-structure", meaning: "= quan điểm của Tiến sĩ Peter Ungar về tổ tiên" }
+          ],
+          whyCorrect: { ruleTitle: "Định vị thông tin theo đoạn văn", detail: "Động từ 'excludes' = 'doesn't include' (loại trừ, không bao gồm). Thông tin này nằm ngay câu đầu tiên của <span class='exp-highlight-green'>paragraph 3</span>: 'A paleo diet is special because it doesn't include grains, dairy foods, or legumes...'." },
+          whyWrong: [
+            { word: "B", reason: "đoạn 2 chỉ nêu những món được phép ăn (includes), còn đoạn 3 mới nêu những nguyên liệu bị loại trừ (excludes)." }
+          ]
+        }
+      },
+      {
+        id: 28,
+        exTitle: "PRACTICE TEST 2 - Read the following passage and mark the letter A, B, C, or D on your answer sheet to indicate the best answer to each of the following questions from 21 to 28.",
+        question: "Question 28. In which paragraph does the author explore how our ancestors used to eat?",
+        options: [
+          { key: "A", text: "paragraph 1", raw: "paragraph 1" },
+          { key: "B", text: "paragraph 2", raw: "paragraph 2" },
+          { key: "C", text: "paragraph 3", raw: "paragraph 3" },
+          { key: "D", text: "paragraph 4", raw: "paragraph 4" }
+        ],
+        correct: "D",
+        explanation: {
+          translation: "Ở đoạn văn nào tác giả tìm hiểu/khám phá về cách tổ tiên của chúng ta từng ăn uống?",
+          cards: [
+            { word: "paragraph 1", isCorrect: false, badgeText: "thời hiện đại", badgeType: "badge-structure", meaning: "= nói về siêu thị thời nay" },
+            { word: "paragraph 2", isCorrect: false, badgeText: "nông nghiệp", badgeType: "badge-structure", meaning: "= nói về thời điểm bắt đầu trồng lúa mì và lúa gạo" },
+            { word: "paragraph 3", isCorrect: false, badgeText: "nguyên tắc paleo", badgeType: "badge-structure", meaning: "= nói về thực đơn của người ăn kiêng paleo hiện nay" },
+            { word: "paragraph 4", isCorrect: true, badgeText: "tổ tiên ăn uống", badgeType: "badge-correct", meaning: "= phân tích 'Early human beings lived in different places... many kinds of food were available to our ancestors...'" }
+          ],
+          whyCorrect: { ruleTitle: "Định vị nội dung đoạn văn", detail: "Trong <span class='exp-highlight-green'>paragraph 4</span>, tác giả trích dẫn nghiên cứu của Tiến sĩ Peter Ungar phân tích chi tiết cách người tiền sử và tổ tiên chúng ta (<span class='exp-highlight-green'>our ancestors / early human beings</span>) ăn uống đa dạng theo từng vùng khí hậu từ Bắc Cực đến vùng nhiệt đới." },
+          whyWrong: [
+            { word: "A, B, C", reason: "không đi sâu phân tích thực tế chế độ ăn đa dạng của tổ tiên loài người theo vùng khí hậu như đoạn 4." }
+          ]
+        }
+      },
+
+      // PHẦN TỰ LUẬN 1: VIẾT LẠI CÂU (CHUYỂN THÀNH ABCD - Câu 29 - 32)
+      {
+        id: 29,
+        exTitle: "PHẦN TỰ LUẬN - Rewrite the sentences using the given words.",
+        question: "Question 29. Rewrite the sentence:<br><b>When you jog on the spot, remember to raise your knees high.</b>",
+        options: [
+          { key: "A", text: "When jogging on the spot, don't forget to raise your knees high.", raw: "When jogging on the spot, don't forget to raise your knees high." },
+          { key: "B", text: "When you jog on the spot, don't forget raising your knees high.", raw: "When you jog on the spot, don't forget raising your knees high." },
+          { key: "C", text: "When jogging on the spot, remember raising your knees high.", raw: "When jogging on the spot, remember raising your knees high." },
+          { key: "D", text: "Remember to raise your knees high when you jogging on the spot.", raw: "Remember to raise your knees high when you jogging on the spot." }
+        ],
+        correct: "A",
+        explanation: {
+          translation: "Câu gốc: Khi bạn chạy bộ tại chỗ, hãy nhớ nâng cao đầu gối.<br>→ Viết lại: Khi chạy bộ tại chỗ, đừng quên nâng cao đầu gối.",
+          cards: [
+            { word: "Câu A", isCorrect: true, badgeText: "chuẩn ngữ pháp 100%", badgeType: "badge-correct", meaning: "= rút gọn 'When jogging...' và chuyển 'remember to V' thành 'don't forget to V'" },
+            { word: "Câu B", isCorrect: false, badgeText: "sai forget + V-ing", badgeType: "badge-wrong", meaning: "= 'forget + V-ing' mang nghĩa quên một việc đã làm trong quá khứ" },
+            { word: "Câu C", isCorrect: false, badgeText: "sai remember + V-ing", badgeType: "badge-wrong", meaning: "= 'remember + V-ing' là nhớ việc đã xảy ra rồi" },
+            { word: "Câu D", isCorrect: false, badgeText: "thiếu to be", badgeType: "badge-wrong", meaning: "= 'when you jogging' thiếu động từ to be 'are'" }
+          ],
+          whyCorrect: { ruleTitle: "Cấu trúc nhắc nhở Remember to V = Don't forget to V", detail: "1. Nhắc nhở ai nhớ làm nhiệm vụ: <span class='exp-highlight-green'>remember to V = don't forget to V</span>.<br>2. Rút gọn mệnh đề trạng ngữ chỉ thời gian: <span class='exp-highlight-green'>When you jog = When jogging</span>." },
+          whyWrong: [
+            { word: "B, C", reason: "dùng V-ing sau remember/forget làm sai lệch nghĩa nhắc nhở." },
+            { word: "D", reason: "sai ngữ pháp mệnh đề 'when you jogging'." }
+          ]
+        }
+      },
+      {
+        id: 30,
+        exTitle: "PHẦN TỰ LUẬN - Rewrite the sentences using the given words.",
+        question: "Question 30. Rewrite the sentence:<br><b>It's over two weeks since Peter last woke up early to do exercise.</b>",
+        options: [
+          { key: "A", text: "Peter hasn't woken up early to do exercise for over two weeks.", raw: "Peter hasn't woken up early to do exercise for over two weeks." },
+          { key: "B", text: "Peter didn't wake up early to do exercise for over two weeks.", raw: "Peter didn't wake up early to do exercise for over two weeks." },
+          { key: "C", text: "Peter hasn't woke up early to do exercise since over two weeks.", raw: "Peter hasn't woke up early to do exercise since over two weeks." },
+          { key: "D", text: "Peter has woken up early to do exercise for over two weeks.", raw: "Peter has woken up early to do exercise for over two weeks." }
+        ],
+        correct: "A",
+        explanation: {
+          translation: "Câu gốc: Đã hơn hai tuần kể từ lần cuối cùng Peter thức dậy sớm để tập thể dục.<br>→ Viết lại: Peter đã không thức dậy sớm để tập thể dục trong hơn hai tuần nay.",
+          cards: [
+            { word: "Câu A", isCorrect: true, badgeText: "chuẩn công thức", badgeType: "badge-correct", meaning: "= hasn't + V3 (woken up) + for + khoảng thời gian (over two weeks)" },
+            { word: "Câu B", isCorrect: false, badgeText: "sai thì", badgeType: "badge-wrong", meaning: "= dùng quá khứ đơn didn't wake up là sai" },
+            { word: "Câu C", isCorrect: false, badgeText: "sai V3 & since", badgeType: "badge-wrong", meaning: "= cột 3 của wake là woken (không phải woke) và khoảng thời gian dùng for" },
+            { word: "Câu D", isCorrect: false, badgeText: "ngược nghĩa", badgeType: "badge-wrong", meaning: "= dùng thể khẳng định (đã dậy sớm suốt 2 tuần) là trái nghĩa câu gốc" }
+          ],
+          whyCorrect: { ruleTitle: "Chuyển đổi cấu trúc It's + time + since... sang Hiện tại hoàn thành phủ định", detail: "Công thức: <span class='exp-highlight-green'>It's + khoảng thời gian + since + S + last + V2/ed</span> ⇔ <span class='exp-highlight-green'>S + haven't / hasn't + V3/ed + for + khoảng thời gian</span> (wake - woke - woken)." },
+          whyWrong: [
+            { word: "B, C, D", reason: "sai thì, sai phân từ II (woken) hoặc ngược nghĩa câu gốc." }
+          ]
+        }
+      },
+      {
+        id: 31,
+        exTitle: "PHẦN TỰ LUẬN - Rewrite the sentences using the given words.",
+        question: "Question 31. Rewrite the sentence:<br><b>It's wrong of you to stay up too late playing games. (Use a modal verb)</b>",
+        options: [
+          { key: "A", text: "You shouldn't stay up too late playing games.", raw: "You shouldn't stay up too late playing games." },
+          { key: "B", text: "You don't have to stay up too late playing games.", raw: "You don't have to stay up too late playing games." },
+          { key: "C", text: "You needn't stay up too late playing games.", raw: "You needn't stay up too late playing games." },
+          { key: "D", text: "You may not stay up too late playing games.", raw: "You may not stay up too late playing games." }
+        ],
+        correct: "A",
+        explanation: {
+          translation: "Câu gốc: Bạn thật sai lầm khi thức quá khuya để chơi điện tử.<br>→ Viết lại: Bạn không nên thức quá khuya để chơi điện tử.",
+          cards: [
+            { word: "Câu A", isCorrect: true, badgeText: "chuẩn lời khuyên", badgeType: "badge-correct", meaning: "= You shouldn't / ought not to stay up too late..." },
+            { word: "Câu B", isCorrect: false, badgeText: "không cần thiết", badgeType: "badge-wrong", meaning: "= don't have to nghĩa là không bắt buộc phải làm" },
+            { word: "Câu C", isCorrect: false, badgeText: "không cần", badgeType: "badge-wrong", meaning: "= needn't nghĩa là không cần thiết" },
+            { word: "Câu D", isCorrect: false, badgeText: "phỏng đoán", badgeType: "badge-wrong", meaning: "= may not chỉ sự phỏng đoán không chắc chắn" }
+          ],
+          whyCorrect: { ruleTitle: "Động từ khuyết thiếu khuyên răn / phê bình", detail: "Cụm từ <span class='exp-highlight-green'>'It's wrong of you to V'</span> (Bạn làm vậy là không đúng/sai trái) tương đương với lời khuyên bảo không nên làm: <span class='exp-highlight-green'>You shouldn't / oughtn't to + V-bare</span>." },
+          whyWrong: [
+            { word: "B, C, D", reason: "không diễn đạt được sắc thái phê bình/khuyên răn đối với một thói quen xấu." }
+          ]
+        }
+      },
+      {
+        id: 32,
+        exTitle: "PHẦN TỰ LUẬN - Rewrite the sentences using the given words.",
+        question: "Question 32. Rewrite the sentence:<br><b>It's forbidden for students to smoke in the schoolyard. (Use a modal verb)</b>",
+        options: [
+          { key: "A", text: "Students mustn't smoke in the schoolyard.", raw: "Students mustn't smoke in the schoolyard." },
+          { key: "B", text: "Students don't have to smoke in the schoolyard.", raw: "Students don't have to smoke in the schoolyard." },
+          { key: "C", text: "Students needn't smoke in the schoolyard.", raw: "Students needn't smoke in the schoolyard." },
+          { key: "D", text: "Students might not smoke in the schoolyard.", raw: "Students might not smoke in the schoolyard." }
+        ],
+        correct: "A",
+        explanation: {
+          translation: "Câu gốc: Học sinh bị nghiêm cấm hút thuốc trong sân trường.<br>→ Viết lại: Học sinh không được phép (cấm) hút thuốc trong sân trường.",
+          cards: [
+            { word: "Câu A", isCorrect: true, badgeText: "cấm đoán chuẩn", badgeType: "badge-correct", meaning: "= mustn't + V-bare (nghiêm cấm = be forbidden to V)" },
+            { word: "Câu B", isCorrect: false, badgeText: "sai nghĩa", badgeType: "badge-wrong", meaning: "= don't have to nghĩa là không cần phải làm (tùy ý)" },
+            { word: "Câu C", isCorrect: false, badgeText: "sai nghĩa", badgeType: "badge-wrong", meaning: "= needn't nghĩa là không cần thiết" },
+            { word: "Câu D", isCorrect: false, badgeText: "sai nghĩa", badgeType: "badge-wrong", meaning: "= might not nghĩa là có lẽ không" }
+          ],
+          whyCorrect: { ruleTitle: "Động từ khuyết thiếu chỉ sự cấm đoán (Prohibition)", detail: "Cấu trúc <span class='exp-highlight-green'>It's forbidden / banned / not allowed for sb to V</span> (Bị cấm làm gì) được viết lại bằng động từ khuyết thiếu chỉ sự cấm đoán tuyệt đối: <span class='exp-highlight-green'>S + mustn't (must not) + V-bare</span>." },
+          whyWrong: [
+            { word: "B, C, D", reason: "không mang nghĩa cấm đoán theo nội quy nhà trường." }
+          ]
+        }
+      },
+
+      // PHẦN TỰ LUẬN 2: CHIA DẠNG ĐÚNG CỦA TỪ TRONG NGOẶC (Câu 33 - 36)
+      {
+        id: 33,
+        exTitle: "PHẦN TỰ LUẬN - Complete the sentences using the correct form of the word in brackets.",
+        question: "Question 33. Taking exercises can help you improve your muscle ________. Therefore, you should go to the gym more often. (STRONG)",
+        options: [
+          { key: "A", text: "strength", raw: "strength" },
+          { key: "B", text: "strengthen", raw: "strengthen" },
+          { key: "C", text: "strongly", raw: "strongly" },
+          { key: "D", text: "stronger", raw: "stronger" }
+        ],
+        correct: "A",
+        explanation: {
+          translation: "Tập thể dục có thể giúp bạn cải thiện sức mạnh cơ bắp. Vì vậy, bạn nên đến phòng tập gym thường xuyên hơn.",
+          cards: [
+            { word: "strength", isCorrect: true, badgeText: "danh từ chuẩn", badgeType: "badge-correct", meaning: "= sức mạnh (muscle strength: sức mạnh cơ bắp)" },
+            { word: "strengthen", isCorrect: false, badgeText: "động từ", badgeType: "badge-wrong", meaning: "= làm mạnh lên" },
+            { word: "strongly", isCorrect: false, badgeText: "trạng từ", badgeType: "badge-wrong", meaning: "= một cách mạnh mẽ" },
+            { word: "stronger", isCorrect: false, badgeText: "tính từ so sánh", badgeType: "badge-wrong", meaning: "= khỏe hơn" }
+          ],
+          whyCorrect: { ruleTitle: "Cụm danh từ làm tân ngữ sau động từ 'improve'", detail: "Sau cụm 'your muscle' cần một danh từ chính để tạo thành cụm danh từ ghép làm tân ngữ cho động từ 'improve' → Danh từ của tính từ 'strong' là <span class='exp-highlight-green'>strength</span> (<span class='exp-highlight-green'>muscle strength</span>: sức mạnh cơ bắp)." },
+          whyWrong: [
+            { word: "B, C, D", reason: "sai từ loại (động từ, trạng từ, tính từ)." }
+          ]
+        }
+      },
+      {
+        id: 34,
+        exTitle: "PHẦN TỰ LUẬN - Complete the sentences using the correct form of the word in brackets.",
+        question: "Question 34. Avoiding smoking and excessive alcohol consumption can help improve your life ________. (EXPECTED)",
+        options: [
+          { key: "A", text: "expectancy", raw: "expectancy" },
+          { key: "B", text: "expectation", raw: "expectation" },
+          { key: "C", text: "expecting", raw: "expecting" },
+          { key: "D", text: "unexpectedly", raw: "unexpectedly" }
+        ],
+        correct: "A",
+        explanation: {
+          translation: "Tránh hút thuốc và uống quá nhiều rượu bia có thể giúp nâng cao tuổi thọ của bạn.",
+          cards: [
+            { word: "expectancy", isCorrect: true, badgeText: "collocation chuẩn", badgeType: "badge-correct", meaning: "= tuổi thọ trung bình (life expectancy)" },
+            { word: "expectation", isCorrect: false, badgeText: "sự kỳ vọng", badgeType: "badge-wrong", meaning: "= sự mong đợi, kỳ vọng" },
+            { word: "expecting", isCorrect: false, badgeText: "V-ing", badgeType: "badge-wrong", meaning: "= đang mong chờ" },
+            { word: "unexpectedly", isCorrect: false, badgeText: "trạng từ", badgeType: "badge-wrong", meaning: "= một cách bất ngờ" }
+          ],
+          whyCorrect: { ruleTitle: "Thuật ngữ cố định Tuổi thọ (Life Expectancy)", detail: "Cụm danh từ cố định trọng tâm chủ đề Sức khỏe (Unit 1 Tiếng Anh 11): <span class='exp-highlight-green'>life expectancy</span> (tuổi thọ)." },
+          whyWrong: [
+            { word: "expectation", reason: "mang nghĩa kỳ vọng tâm lý, không kết hợp với 'life' để chỉ tuổi thọ." },
+            { word: "C, D", reason: "sai từ loại." }
+          ]
+        }
+      },
+      {
+        id: 35,
+        exTitle: "PHẦN TỰ LUẬN - Complete the sentences using the correct form of the word in brackets.",
+        question: "Question 35. Hung is a ________ thinker. He always tries to look into things from different aspects and contributes to work out a better solution. (CRITIC)",
+        options: [
+          { key: "A", text: "critical", raw: "critical" },
+          { key: "B", text: "critically", raw: "critically" },
+          { key: "C", text: "criticism", raw: "criticism" },
+          { key: "D", text: "criticize", raw: "criticize" }
+        ],
+        correct: "A",
+        explanation: {
+          translation: "Hùng là một người có tư duy phản biện. Cậu ấy luôn cố gắng nhìn nhận sự việc từ nhiều khía cạnh khác nhau và đóng góp để tìm ra giải pháp tốt hơn.",
+          cards: [
+            { word: "critical", isCorrect: true, badgeText: "tính từ chuẩn", badgeType: "badge-correct", meaning: "= có tính phản biện, phân tích đa chiều (a critical thinker)" },
+            { word: "critically", isCorrect: false, badgeText: "trạng từ", badgeType: "badge-wrong", meaning: "= một cách nghiêm trọng / phản biện" },
+            { word: "criticism", isCorrect: false, badgeText: "danh từ", badgeType: "badge-wrong", meaning: "= sự chỉ trích" },
+            { word: "criticize", isCorrect: false, badgeText: "động từ", badgeType: "badge-wrong", meaning: "= phê bình, chỉ trích" }
+          ],
+          whyCorrect: { ruleTitle: "Tính từ đứng trước danh từ chỉ người", detail: "Đứng giữa mạo từ 'a' và danh từ chỉ người 'thinker' cần một tính từ → <span class='exp-highlight-green'>critical thinker</span> (người có tư duy phản biện sắc bén)." },
+          whyWrong: [
+            { word: "B, C, D", reason: "trạng từ, danh từ và động từ không đứng ở vị trí tính từ bổ nghĩa cho thinker." }
+          ]
+        }
+      },
+      {
+        id: 36,
+        exTitle: "PHẦN TỰ LUẬN - Complete the sentences using the correct form of the word in brackets.",
+        question: "Question 36. I prefer to work ________, while my dad always says teamwork is better. (INDIVIDUAL)",
+        options: [
+          { key: "A", text: "individually", raw: "individually" },
+          { key: "B", text: "individualism", raw: "individualism" },
+          { key: "C", text: "individuality", raw: "individuality" },
+          { key: "D", text: "individuals", raw: "individuals" }
+        ],
+        correct: "A",
+        explanation: {
+          translation: "Tôi thích làm việc độc lập (cá nhân) hơn, trong khi bố tôi luôn nói rằng làm việc nhóm thì tốt hơn.",
+          cards: [
+            { word: "individually", isCorrect: true, badgeText: "trạng từ chuẩn", badgeType: "badge-correct", meaning: "= một cách độc lập, cá nhân (work individually)" },
+            { word: "individualism", isCorrect: false, badgeText: "danh từ", badgeType: "badge-wrong", meaning: "= chủ nghĩa cá nhân" },
+            { word: "individuality", isCorrect: false, badgeText: "danh từ", badgeType: "badge-wrong", meaning: "= cá tính riêng" },
+            { word: "individuals", isCorrect: false, badgeText: "danh từ số nhiều", badgeType: "badge-wrong", meaning: "= những cá nhân" }
+          ],
+          whyCorrect: { ruleTitle: "Trạng từ bổ nghĩa cho động từ thường 'work'", detail: "Để bổ nghĩa cho nội động từ <span class='exp-highlight-green'>'work'</span> (làm việc như thế nào - đối lập với teamwork ở vế sau), ta cần dùng trạng từ <span class='exp-highlight-green'>individually</span> (làm việc riêng lẻ/độc lập)." },
+          whyWrong: [
+            { word: "B, C, D", reason: "đều là danh từ nên không thể bổ nghĩa cho động từ work." }
+          ]
+        }
+      },
+
+      // PHẦN TỰ LUẬN 3: SẮP XẾP TỪ THÀNH CÂU HOÀN CHỈNH (Câu 37 - 40)
+      {
+        id: 37,
+        exTitle: "PHẦN TỰ LUẬN - Rearrange the words to make meaningful sentences.",
+        question: "Question 37. Rearrange the words:<br><b>should / daily / We / activities / physical / include / our / in / routines.</b>",
+        options: [
+          { key: "A", text: "We should include physical activities in our daily routines.", raw: "We should include physical activities in our daily routines." },
+          { key: "B", text: "We should include daily activities in our physical routines.", raw: "We should include daily activities in our physical routines." },
+          { key: "C", text: "We should physical activities include in our daily routines.", raw: "We should physical activities include in our daily routines." },
+          { key: "D", text: "In our daily routines should we include physical activities.", raw: "In our daily routines should we include physical activities." }
+        ],
+        correct: "A",
+        explanation: {
+          translation: "Chúng ta nên đưa các hoạt động thể chất vào trong thói quen sinh hoạt hàng ngày của mình.",
+          cards: [
+            { word: "Câu A", isCorrect: true, badgeText: "chuẩn xác 100%", badgeType: "badge-correct", meaning: "= We should include physical activities in our daily routines." },
+            { word: "Câu B", isCorrect: false, badgeText: "tráo tính từ", badgeType: "badge-wrong", meaning: "= tráo đổi vị trí của physical và daily làm câu thiếu tự nhiên" },
+            { word: "Câu C", isCorrect: false, badgeText: "sai vị trí V", badgeType: "badge-wrong", meaning: "= sau should phải là động từ nguyên mẫu include" },
+            { word: "Câu D", isCorrect: false, badgeText: "đảo ngữ sai", badgeType: "badge-wrong", meaning: "= câu trần thuật không đảo should lên trước we" }
+          ],
+          whyCorrect: { ruleTitle: "Cấu trúc Include sth in sth", detail: "Chủ ngữ + Modal verb: <span class='exp-highlight-green'>We should include</span> + Tân ngữ: <span class='exp-highlight-green'>physical activities</span> (các hoạt động thể chất) + Giới từ: <span class='exp-highlight-green'>in our daily routines</span> (vào lịch trình hàng ngày)." },
+          whyWrong: [
+            { word: "B, C, D", reason: "sai kết hợp cụm danh từ hoặc sai trật tự từ." }
+          ]
+        }
+      },
+      {
+        id: 38,
+        exTitle: "PHẦN TỰ LUẬN - Rearrange the words to make meaningful sentences.",
+        question: "Question 38. Rearrange the words:<br><b>not / Children / food. / too / eat / junk / much / should</b>",
+        options: [
+          { key: "A", text: "Children should not eat too much junk food.", raw: "Children should not eat too much junk food." },
+          { key: "B", text: "Children should eat not too much food junk.", raw: "Children should eat not too much food junk." },
+          { key: "C", text: "Children not should eat too much junk food.", raw: "Children not should eat too much junk food." },
+          { key: "D", text: "Too much junk food children should not eat.", raw: "Too much junk food children should not eat." }
+        ],
+        correct: "A",
+        explanation: {
+          translation: "Trẻ em không nên ăn quá nhiều đồ ăn vặt không lành mạnh.",
+          cards: [
+            { word: "Câu A", isCorrect: true, badgeText: "chuẩn 100%", badgeType: "badge-correct", meaning: "= Children should not eat too much junk food." },
+            { word: "Câu B", isCorrect: false, badgeText: "sai vị trí not & N", badgeType: "badge-wrong", meaning: "= đặt not sau eat và đảo ngược 'food junk'" },
+            { word: "Câu C", isCorrect: false, badgeText: "sai vị trí not", badgeType: "badge-wrong", meaning: "= not phải đứng sau động từ khuyết thiếu should" },
+            { word: "Câu D", isCorrect: false, badgeText: "sai trật tự", badgeType: "badge-wrong", meaning: "= đảo tân ngữ lên đầu câu không tự nhiên" }
+          ],
+          whyCorrect: { ruleTitle: "Cấu trúc câu khuyên bảo phủ định với Should not", detail: "Chủ ngữ: <span class='exp-highlight-green'>Children</span> + Động từ khuyết thiếu phủ định: <span class='exp-highlight-green'>should not eat</span> + Định lượng & Danh từ: <span class='exp-highlight-green'>too much junk food</span>." },
+          whyWrong: [
+            { word: "B, C, D", reason: "sai vị trí của từ phủ định 'not' và cụm danh từ 'junk food'." }
+          ]
+        }
+      },
+      {
+        id: 39,
+        exTitle: "PHẦN TỰ LUẬN - Rearrange the words to make meaningful sentences.",
+        question: "Question 39. Rearrange the words:<br><b>important / health. / for / is / sleep / good / Having</b>",
+        options: [
+          { key: "A", text: "Having good sleep is important for health.", raw: "Having good sleep is important for health." },
+          { key: "B", text: "Having sleep good is important for health.", raw: "Having sleep good is important for health." },
+          { key: "C", text: "Good sleep is important for having health.", raw: "Good sleep is important for having health." },
+          { key: "D", text: "Having health is important for good sleep.", raw: "Having health is important for good sleep." }
+        ],
+        correct: "A",
+        explanation: {
+          translation: "Có được giấc ngủ ngon là rất quan trọng đối với sức khỏe.",
+          cards: [
+            { word: "Câu A", isCorrect: true, badgeText: "chuẩn ngữ pháp", badgeType: "badge-correct", meaning: "= Danh động từ làm chủ ngữ 'Having good sleep' + is important for health." },
+            { word: "Câu B", isCorrect: false, badgeText: "sai vị trí adj", badgeType: "badge-wrong", meaning: "= tính từ good phải đứng trước danh từ sleep" },
+            { word: "Câu C", isCorrect: false, badgeText: "sai chữ Having", badgeType: "badge-wrong", meaning: "= chữ 'Having' trong đề viết hoa chữ cái đầu nên phải đứng đầu câu" },
+            { word: "Câu D", isCorrect: false, badgeText: "ngược ý nghĩa", badgeType: "badge-wrong", meaning: "= đảo ngược mối quan hệ nhân quả giữa giấc ngủ và sức khỏe" }
+          ],
+          whyCorrect: { ruleTitle: "Danh động từ (Gerund) làm chủ ngữ", detail: "Từ <span class='exp-highlight-green'>'Having'</span> được viết hoa chữ cái đầu → Cụm danh động từ làm chủ ngữ: <span class='exp-highlight-green'>Having good sleep</span> + vị ngữ: <span class='exp-highlight-green'>is important for health</span>." },
+          whyWrong: [
+            { word: "B, C, D", reason: "sai vị trí từ viết hoa đầu câu hoặc sai nghĩa." }
+          ]
+        }
+      },
+      {
+        id: 40,
+        exTitle: "PHẦN TỰ LUẬN - Rearrange the words to make meaningful sentences.",
+        question: "Question 40. Rearrange the words:<br><b>encourages / Yoga / relaxation / and / flexibility. / both</b>",
+        options: [
+          { key: "A", text: "Yoga encourages both relaxation and flexibility.", raw: "Yoga encourages both relaxation and flexibility." },
+          { key: "B", text: "Yoga both encourages relaxation and flexibility.", raw: "Yoga both encourages relaxation and flexibility." },
+          { key: "C", text: "Both Yoga encourages relaxation and flexibility.", raw: "Both Yoga encourages relaxation and flexibility." },
+          { key: "D", text: "Yoga encourages relaxation and both flexibility.", raw: "Yoga encourages relaxation and both flexibility." }
+        ],
+        correct: "A",
+        explanation: {
+          translation: "Bộ môn Yoga thúc đẩy cả sự thư giãn lẫn sự dẻo dai linh hoạt.",
+          cards: [
+            { word: "Câu A", isCorrect: true, badgeText: "chuẩn both... and...", badgeType: "badge-correct", meaning: "= Yoga encourages both relaxation and flexibility." },
+            { word: "Câu B", isCorrect: false, badgeText: "lệch cấu trúc", badgeType: "badge-wrong", meaning: "= đặt both trước động từ encourages khi chỉ có 1 động từ là không chuẩn" },
+            { word: "Câu C", isCorrect: false, badgeText: "sai vị trí both", badgeType: "badge-wrong", meaning: "= Yoga là 1 môn duy nhất, không dùng Both Yoga" },
+            { word: "Câu D", isCorrect: false, badgeText: "sai vị trí both", badgeType: "badge-wrong", meaning: "= both phải đứng trước danh từ thứ nhất (relaxation)" }
+          ],
+          whyCorrect: { ruleTitle: "Liên từ tương quan Both ... and ...", detail: "Cấu trúc song hành nối 2 danh từ làm tân ngữ: <span class='exp-highlight-green'>both + N1 + and + N2</span> → <span class='exp-highlight-green'>Yoga encourages both relaxation and flexibility</span>." },
+          whyWrong: [
+            { word: "B, C, D", reason: "đặt sai vị trí của từ 'both' trong cấu trúc tương quan 'both A and B'." }
+          ]
+        }
+      }
+    ];
+
+    const userAnswers = {};
+
+    /* WEB AUDIO API */
+    let audioCtx = null;
+    function getAudioContext() {
+      if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      if (audioCtx.state === 'suspended') audioCtx.resume();
+      return audioCtx;
+    }
+
+    function playCorrectSound() {
+      try {
+        const ctx = getAudioContext();
+        const now = ctx.currentTime;
+        const osc1 = ctx.createOscillator();
+        const osc2 = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc1.type = 'sine'; osc2.type = 'triangle';
+        osc1.frequency.setValueAtTime(1046.50, now);
+        osc1.frequency.exponentialRampToValueAtTime(1318.51, now + 0.12);
+        osc2.frequency.setValueAtTime(1318.51, now);
+        osc2.frequency.exponentialRampToValueAtTime(1567.98, now + 0.12);
+        gain.gain.setValueAtTime(0.25, now);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.65);
+        osc1.connect(gain); osc2.connect(gain); gain.connect(ctx.destination);
+        osc1.start(now); osc2.start(now);
+        osc1.stop(now + 0.65); osc2.stop(now + 0.65);
+      } catch (e) { console.log(e); }
+    }
+
+    function playWrongSound() {
+      try {
+        const ctx = getAudioContext();
+        const now = ctx.currentTime;
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.type = 'sawtooth';
+        osc.frequency.setValueAtTime(280, now);
+        osc.frequency.linearRampToValueAtTime(190, now + 0.15);
+        osc.frequency.linearRampToValueAtTime(130, now + 0.35);
+        gain.gain.setValueAtTime(0.2, now);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.45);
+        osc.connect(gain); gain.connect(ctx.destination);
+        osc.start(now); osc.stop(now + 0.45);
+      } catch (e) { console.log(e); }
+    }
+
+    function launchConfetti() {
+      if (typeof confetti === 'function') {
+        confetti({ particleCount: 75, spread: 75, origin: { y: 0.72 }, colors: ['#8854C0', '#FDCB6E', '#00C9A7', '#FF4757', '#0984E3'] });
+      }
+    }
+
+    function shuffleArray(array) {
+      const arr = [...array];
+      for (let i = arr.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [arr[i], arr[j]] = [arr[j], arr[i]];
+      }
+      return arr;
+    }
+
+    function updateProgressBar() {
+      const answeredCount = Object.keys(userAnswers).length;
+      let correctCount = 0;
+      quizData.forEach(q => { if (userAnswers[q.id] === q.correct) correctCount++; });
+      const total = quizData.length;
+      const percent = (answeredCount / total) * 100;
+      document.getElementById('star-score-text').textContent = `${correctCount} / ${total}`;
+      document.getElementById('progress-ratio-text').textContent = `${answeredCount} / ${total}`;
+      document.getElementById('progress-bar-fill').style.width = `${percent}%`;
+    }
+
+    function renderQuiz() {
+      const container = document.getElementById('quiz-container');
+      container.innerHTML = '';
+      let currentEx = "";
+
+      quizData.forEach((q, idx) => {
+        if (q.exTitle !== currentEx) {
+          currentEx = q.exTitle;
+          const divider = document.createElement('div');
+          divider.className = 'exercise-divider';
+          divider.innerHTML = `<span>📘</span> <span>${currentEx}</span>`;
+          container.appendChild(divider);
+        }
+
+        const card = document.createElement('div');
+        card.className = 'question-card';
+        card.id = `q-card-${q.id}`;
+        const shuffledOptions = shuffleArray(q.options);
+
+        const optionsHTML = `
+          <div class="options-grid ${shuffledOptions.length === 4 ? 'two-cols' : ''}">
+            ${shuffledOptions.map(opt => `
+              <button type="button" class="option-btn" id="btn-${q.id}-${opt.key}" onclick="handleSelectOption(${q.id}, '${opt.key}')">
+                <span class="option-key">${opt.key}</span>
+                <span class="option-text">${opt.text}</span>
+              </button>
+            `).join('')}
+          </div>
+        `;
+
+        const exp = q.explanation;
+        const explanationHTML = `
+          <div class="explanation-box" id="exp-${q.id}" style="display: none;">
+            <div class="exp-title">⚡ GIẢI THÍCH CHI TIẾT</div>
+            <div class="exp-translation-bubble">
+              <span class="icon">💭</span>
+              <span><strong>Dịch:</strong> ${exp.translation}</span>
+            </div>
+            <div class="exp-section-title">1. Phân tích 4 đáp án:</div>
+            <div class="analysis-grid">
+              ${exp.cards.map(c => `
+                <div class="analysis-card">
+                  <span class="analysis-word ${c.isCorrect ? 'green' : ''}">${c.word}</span>
+                  <span class="badge-pill ${c.badgeType}">${c.badgeText}</span>
+                  <span class="analysis-meaning">${c.meaning}</span>
+                </div>
+              `).join('')}
+            </div>
+            <div class="exp-rule-row">
+              <span class="check-label">2. ✅ TẠI SAO ĐÚNG?</span>
+              <span class="exp-rule-pill">${exp.whyCorrect.ruleTitle}:</span>
+              <span>${exp.whyCorrect.detail}</span>
+            </div>
+            <div class="exp-wrong-row">
+              <span class="cross-label">3. ❌ TẠI SAO SAI?</span>
+              ${exp.whyWrong.map(w => `<span class="exp-wrong-tag">${w.word}</span> - ${w.reason}`).join(' ')}
+            </div>
+          </div>
+        `;
+
+        card.innerHTML = `
+          <div class="question-header">
+            <span class="question-num">Câu ${idx + 1}</span>
+            <span class="question-type-badge">Chấm điểm tức thì</span>
+          </div>
+          <div class="question-content">${q.question}</div>
+          ${optionsHTML}
+          ${explanationHTML}
+        `;
+        container.appendChild(card);
+      });
+
+      updateProgressBar();
+    }
+
+    function handleSelectOption(qId, selectedKey) {
+      if (userAnswers[qId] !== undefined) return;
+      const q = quizData.find(item => item.id === qId);
+      userAnswers[qId] = selectedKey;
+
+      const isCorrect = (selectedKey === q.correct);
+      const selectedBtn = document.getElementById(`btn-${qId}-${selectedKey}`);
+
+      if (isCorrect) {
+        selectedBtn.classList.add('correct');
+        playCorrectSound();
+        launchConfetti();
+      } else {
+        selectedBtn.classList.add('wrong');
+        playWrongSound();
+        const correctBtn = document.getElementById(`btn-${qId}-${q.correct}`);
+        if (correctBtn) correctBtn.classList.add('correct');
+      }
+
+      q.options.forEach(opt => {
+        const b = document.getElementById(`btn-${qId}-${opt.key}`);
+        if (b) b.disabled = true;
+      });
+
+      const expBox = document.getElementById(`exp-${qId}`);
+      if (expBox) expBox.style.display = 'block';
+
+      updateProgressBar();
+    }
+
+    function submitQuiz() {
+      let score = 0;
+      quizData.forEach(q => { if (userAnswers[q.id] === q.correct) score++; });
+      const total = quizData.length;
+      const percentage = (score / total) * 100;
+      let emoji = '🌟';
+      let message = '';
+
+      if (percentage < 50) {
+        emoji = '💪';
+        message = '“Điểm lần này chưa cao lắm, con cố gắng đọc kỹ giải thích đáp án và làm lại nha. Cô tin con sẽ làm tốt hơn ở lần sau!”<br><br><strong>— Ms Lê Hằng English —</strong>';
+      } else if (percentage >= 50 && percentage < 90) {
+        emoji = '👏';
+        message = '“Con đã có tiến bộ khá ổn rồi, con cố gắng đọc kỹ giải thích đáp án và làm lại nha. Cô tin con sẽ làm tốt hơn ở lần sau!”<br><br><strong>— Ms Lê Hằng English —</strong>';
+      } else {
+        emoji = '👑';
+        message = '“Làm tốt lắm, con cố gắng ring điểm 10 ở lần sau nha!”<br><br><strong>— Ms Lê Hằng English —</strong>';
+        launchConfetti();
+      }
+
+      document.getElementById('result-emoji').innerHTML = emoji;
+      document.getElementById('result-score').textContent = `${score} / ${total} CÂU ĐÚNG (${Math.round(percentage)}%)`;
+      document.getElementById('result-feedback').innerHTML = message;
+      document.getElementById('result-modal').style.display = 'flex';
+    }
+
+    function retryQuiz() {
+      document.getElementById('result-modal').style.display = 'none';
+      for (const key in userAnswers) delete userAnswers[key];
+      renderQuiz();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    window.addEventListener('DOMContentLoaded', () => {
+      renderQuiz();
+    });
+  </script>
+</body>
+</html>
